@@ -28,8 +28,9 @@ virtual class BaseTr extends uvm_sequence_item;
   static int count;  // Number of instance created
   int id;            // Unique transaction id
 
-  function new();
-    id = count++;
+  function new(string name = "BaseTr");
+   super.new(name);
+   id = count++;
   endfunction
 
   // "pure" methods supported in VCS 2008.03 and later
@@ -58,7 +59,21 @@ class UNI_cell extends BaseTr;
    static bit [7:0] syndrome[0:255];
    static bit syndrome_not_generated = 1;
 
-   extern function new();
+   //---------------------------------------
+   // Utility and Field macros
+   //---------------------------------------
+   `uvm_object_utils_begin(UNI_cell)
+    `uvm_field_int(GFC,       UVM_ALL_ON)
+    `uvm_field_int(VPI,       UVM_ALL_ON)
+    `uvm_field_int(VCI,       UVM_ALL_ON)
+    `uvm_field_int(CLP,       UVM_ALL_ON)
+    `uvm_field_int(PT,        UVM_ALL_ON)
+    `uvm_field_int(HEC,       UVM_ALL_ON)
+    `uvm_field_int(Payload,   UVM_ALL_ON)
+   `uvm_object_utils_end
+
+   // extern function new();
+   extern function new(string name = "UNI_cell");
    extern function void post_randomize();
    extern virtual function bit compare(input BaseTr to);
    extern virtual function void display(input string prefix="");
@@ -73,7 +88,14 @@ endclass : UNI_cell
 
 
 //-----------------------------------------------------------------------------
-function UNI_cell::new();
+// function UNI_cell::new();
+//    if (syndrome_not_generated)
+//      generate_syndrome();
+// endfunction : new
+
+//-----------------------------------------------------------------------------
+function UNI_cell::new(string name = "UNI_cell");
+   super.new(name);
    if (syndrome_not_generated)
      generate_syndrome();
 endfunction : new
@@ -96,7 +118,7 @@ function bit UNI_cell::compare(input BaseTr to);
    if (this.VPI != other.VPI)         return 0;
    if (this.VCI != other.VCI)         return 0;
    if (this.CLP != other.CLP)         return 0;
-   if (this.PT  != other.PT)           return 0;
+   if (this.PT  != other.PT)          return 0;
    if (this.HEC != other.HEC)         return 0;
    if (this.Payload != other.Payload) return 0;
    return 1;
@@ -223,7 +245,20 @@ class NNI_cell extends BaseTr;
    static bit [7:0] syndrome[0:255];
    static bit syndrome_not_generated = 1;
 
-   extern function new();
+   //---------------------------------------
+   // Utility and Field macros
+   //---------------------------------------
+   `uvm_object_utils_begin(NNI_cell)
+    `uvm_field_int(VPI,       UVM_ALL_ON)
+    `uvm_field_int(VCI,       UVM_ALL_ON)
+    `uvm_field_int(CLP,       UVM_ALL_ON)
+    `uvm_field_int(PT,        UVM_ALL_ON)
+    `uvm_field_int(HEC,       UVM_ALL_ON)
+    `uvm_field_int(Payload,   UVM_ALL_ON)
+   `uvm_object_utils_end
+
+   // extern function new();
+   extern function new(string name = "NNI_cell");
    extern function void post_randomize();
    extern virtual function bit compare(input BaseTr to);
    extern virtual function void display(input string prefix="");
@@ -235,8 +270,15 @@ class NNI_cell extends BaseTr;
    extern function bit [7:0] hec (bit [31:0] hdr);
 endclass : NNI_cell
 
+//-----------------------------------------------------------------------------
+// function NNI_cell::new();
+//    if (syndrome_not_generated)
+//      generate_syndrome();
+// endfunction : new
 
-function NNI_cell::new();
+//-----------------------------------------------------------------------------
+function NNI_cell::new(string name = "NNI_cell");
+   super.new(name);
    if (syndrome_not_generated)
      generate_syndrome();
 endfunction : new
