@@ -57,7 +57,7 @@ endmodule : top
 
 program automatic testp;
 
-`include "environment.sv"
+`include "uvm_environment.sv"
    Environment env;
 
    initial begin
