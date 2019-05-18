@@ -24,7 +24,9 @@
 
 
 /////////////////////////////////////////////////////////////////////////////
-class UNI_generator;
+class UNI_generator extends uvm_sequence#(UNI_cell);
+
+   `uvm_object_utils(UNI_cell)
 
    UNI_cell blueprint;	// Blueprint for generator
    mailbox  gen2drv;	// Mailbox to driver for cells
@@ -47,7 +49,7 @@ class UNI_generator;
       UNI_cell c;
       repeat (nCells) begin
 	 assert(blueprint.randomize());
-	//  $cast(c, blueprint.copy());
+	 $cast(c, blueprint.copy());
 	//  c.display($sformatf("@%0t: Gen%0d: ", $time, PortID));
 	 gen2drv.put(c);
 	 @drv2gen;		// Wait for driver to finish with it
@@ -83,8 +85,8 @@ class NNI_generator;
       NNI_cell c;
       repeat (nCells) begin
 	 assert(blueprint.randomize());
-	//  $cast(c, blueprint.copy());
-	//  c.display($sformatf("Gen%0d: ", PortID));
+	 $cast(c, blueprint.copy());
+	 c.print($sformatf("Gen%0d: ", PortID));
 	 gen2drv.put(c);
 	 @drv2gen;		// Wait for driver to finish with it
       end

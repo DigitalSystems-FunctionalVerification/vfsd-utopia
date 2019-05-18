@@ -1,7 +1,7 @@
 #!/bin/bash
-module load modelsim
+# module load modelsim
 echo "	simulating... please wait"
-{
+# {
   #run vsim
 
   vsim -c -do ./scripts/3_simul.do
@@ -12,6 +12,6 @@ echo "	simulating... please wait"
   #cleanup
   rm -rf *.ini transcript *.wlf work ./src/*~
 
-} > /dev/null
-module unload modelsim
+# } > /dev/null
+# module unload modelsim
 

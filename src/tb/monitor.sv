@@ -21,7 +21,7 @@
 `ifndef MONITOR__SV
 `define MONITOR__SV
 
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 
 typedef virtual Utopia.TB_Tx vUtopiaTx;
 
@@ -94,9 +94,9 @@ task Monitor::receive(output NNI_cell c);
 
    Tx.cbt.clav <= 0;
 
-   c = new();
-   c.unpack(Pkt);
-   c.display($sformatf("@%0t: Mon%0d: ", $time, PortID));
+   // c = new();
+   // c.unpack(Pkt);
+   // c.display($sformatf("@%0t: Mon%0d: ", $time, PortID));
    
 endtask : receive
 

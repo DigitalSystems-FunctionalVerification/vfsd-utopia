@@ -21,7 +21,7 @@
 `ifndef CPU_DRIVER__SV
  `define CPU_DRIVER__SV
 
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 `include "cpu_ifc.sv"
 `include "config.sv"
 //`include "CPUMethod.sv"

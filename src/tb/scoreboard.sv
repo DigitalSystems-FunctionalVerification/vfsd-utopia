@@ -21,7 +21,7 @@
  `define SCOREBOARD__SV
 
 `include "config.sv"
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 
 class Expect_cells;
    NNI_cell q[$];
@@ -56,8 +56,14 @@ endfunction // Scoreboard
 
 //---------------------------------------------------------------------------
 function void Scoreboard::save_expected(UNI_cell ucell);
-   NNI_cell ncell = ucell.to_NNI;
-   CellCfgType CellCfg = top.squat.lut.read(ncell.VPI);
+   NNI_cell ncell; // = ucell.to_NNI
+   CellCfgType CellCfg;// = top.squat.lut.read(ncell.VPI);
+   // ucell.print();
+   if (!$cast(ncell, ucell))
+      `uvm_fatal("CASTERR", "Cast error")
+   $cast(ncell,ucell.clone());
+   ncell.print();
+   CellCfg = top.squat.lut.read(ncell.VPI);
 
    $display("@%0t: Scb save: VPI=%0x, Forward=%b", $time, ncell.VPI, CellCfg.FWD);
 
@@ -79,11 +85,11 @@ function void Scoreboard::check_actual(input NNI_cell c,
    NNI_cell match;
    int match_idx;
 
-   c.display($sformatf("@%0t: Scb check: ", $time));
+   // c.display($sformatf("@%0t: Scb check: ", $time));
 
    if (expect_cells[portn].q.size() == 0) begin
       $display("@%0t: ERROR: %m cell not found because scoreboard for TX%0d empty", $time, portn);
-      c.display("Not Found: ");
+      // c.display("Not Found: ");
       cfg.nErrors++;
       return;
    end
@@ -100,7 +106,7 @@ function void Scoreboard::check_actual(input NNI_cell c,
    end
 
    $display("@%0t: ERROR: %m cell not found", $time);
-   c.display("Not Found: ");
+   // c.display("Not Found: ");
    cfg.nErrors++;
 endfunction : check_actual
 
@@ -125,7 +131,7 @@ endfunction : wrap_up
 //---------------------------------------------------------------------------
 // Print the contents of the scoreboard, mainly for debugging
 //---------------------------------------------------------------------------
-function void Scoreboard::display(string prefix);
+function void Scoreboard::display(string prefix="");
    $display("@%0t: %m so far %0d expected cells, %0d actual cells received", $time, iexpect, iactual);
    foreach (expect_cells[i]) begin
       $display("Tx[%0d]: exp=%0d, act=%0d", i, expect_cells[i].iexpect, expect_cells[i].iactual);
