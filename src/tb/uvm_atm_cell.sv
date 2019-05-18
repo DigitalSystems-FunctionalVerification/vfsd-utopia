@@ -125,7 +125,7 @@ function bit UNI_cell::compare(input BaseTr to);
 endfunction : compare
 
 
-function void UNI_cell::display(input string prefix);
+function void UNI_cell::display(input string prefix = "");
    ATMCellType p;
 
    $display("%sUNI id:%0d GFC=%x, VPI=%x, VCI=%x, CLP=%b, PT=%x, HEC=%x, Payload[0]=%x",
@@ -151,7 +151,7 @@ function void UNI_cell::copy_data(input UNI_cell copy);
 endfunction : copy_data
 
 
-function BaseTr UNI_cell::copy(input BaseTr to);
+function BaseTr UNI_cell::copy(input BaseTr to=null);
    UNI_cell dst;
    if (to == null) dst = new();
    else            $cast(dst, to);
@@ -304,7 +304,7 @@ function bit NNI_cell::compare(input BaseTr to);
 endfunction : compare
 
 
-function void NNI_cell::display(input string prefix);
+function void NNI_cell::display(input string prefix = "");
    ATMCellType p;
 
    $display("%sNNI id:%0d VPI=%x, VCI=%x, CLP=%b, PT=%x, HEC=%x, Payload[0]=%x",
@@ -325,7 +325,7 @@ function void NNI_cell::copy_data(input NNI_cell copy);
    copy.Payload = this.Payload;
 endfunction : copy_data
 
-function BaseTr NNI_cell::copy(input BaseTr to);
+function BaseTr NNI_cell::copy(input BaseTr to=null);
    NNI_cell dst;
    if (to == null) dst = new();
    else            $cast(dst, to);

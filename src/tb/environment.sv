@@ -23,7 +23,7 @@
 
 `include "generator.sv"
 `include "driver.sv"
-`include "monitor.sv"
+`include "uvm_monitor.sv"
 `include "config.sv"
 `include "scoreboard.sv"
 `include "coverage.sv"
@@ -175,7 +175,7 @@ function void Environment::build();
 
    mon = new[numTx];
    foreach (mon[i])
-     mon[i] = new(Tx[i], i);
+     mon[i] = new(Tx[i], i, {"monitor_%", i}, this);
 
    // Connect the scoreboard with callbacks
    begin

@@ -101,7 +101,7 @@ function bit UNI_cell::compare(input BaseTr to);
 endfunction : compare
 
 
-function void UNI_cell::display(input string prefix);
+function void UNI_cell::display(input string prefix = "");
    ATMCellType p;
 
    $display("%sUNI id:%0d GFC=%x, VPI=%x, VCI=%x, CLP=%b, PT=%x, HEC=%x, Payload[0]=%x",
@@ -260,7 +260,7 @@ function bit NNI_cell::compare(input BaseTr to);
 endfunction : compare
 
 
-function void NNI_cell::display(input string prefix);
+function void NNI_cell::display(input string prefix = "");
    ATMCellType p;
 
    $display("%sNNI id:%0d VPI=%x, VCI=%x, CLP=%b, PT=%x, HEC=%x, Payload[0]=%x",

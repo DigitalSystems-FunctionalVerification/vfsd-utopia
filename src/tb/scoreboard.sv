@@ -125,7 +125,7 @@ endfunction : wrap_up
 //---------------------------------------------------------------------------
 // Print the contents of the scoreboard, mainly for debugging
 //---------------------------------------------------------------------------
-function void Scoreboard::display(string prefix);
+function void Scoreboard::display(string prefix = "");
    $display("@%0t: %m so far %0d expected cells, %0d actual cells received", $time, iexpect, iactual);
    foreach (expect_cells[i]) begin
       $display("Tx[%0d]: exp=%0d, act=%0d", i, expect_cells[i].iexpect, expect_cells[i].iactual);
