@@ -1,2 +1,6 @@
 vsim_stacktrace.vstf
 simulation.log
+*.qtl
+*_info
+*.qdb
+*.qpg
