@@ -20,7 +20,7 @@
 `ifndef DRIVER__SV
 `define DRIVER__SV
 
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 
 typedef virtual Utopia.TB_Rx vUtopiaRx;
 

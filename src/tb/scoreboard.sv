@@ -21,7 +21,7 @@
  `define SCOREBOARD__SV
 
 `include "config.sv"
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 
 class Expect_cells;
    NNI_cell q[$];

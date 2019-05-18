@@ -21,7 +21,7 @@
 `ifndef MONITOR__SV
 `define MONITOR__SV
 
-`include "atm_cell.sv"
+`include "uvm_atm_cell.sv"
 
 typedef virtual Utopia.TB_Tx vUtopiaTx;
 
