@@ -132,7 +132,9 @@ function void Test::build_phase(uvm_phase phase);
 
   // env = new(Rx, Tx, NumRx, NumTx, mif);
 
-  atm_cell_test = new();
+  atm_cell_test = UNI_cell::type_id::create("atm_cell_test");
+  atm_cell_test.randomize();
+  
 
   $display("Simulation was run with conditional compilation settings of:");
   $display("`define TxPorts %0d", `TxPorts);
