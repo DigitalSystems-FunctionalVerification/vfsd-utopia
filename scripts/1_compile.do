@@ -3,7 +3,7 @@ vmap work work
 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/config.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/definitions.sv
-#vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_atm_cell.sv 
+vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_atm_cell.sv 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/atm_cell.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/utopia.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/driver.sv 

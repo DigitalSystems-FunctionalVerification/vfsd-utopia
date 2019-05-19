@@ -78,6 +78,11 @@ class Test extends uvm_test;
   // environment instance 
   //---------------------------------------
   // Environment env;
+  
+  //---------------------------------------
+  // atm_cell instance 
+  //---------------------------------------
+  UNI_cell atm_cell_test;
 
   // logic rst, clk;
 
@@ -101,6 +106,7 @@ endfunction
 // Build phase
 //---------------------------------------
 function void Test::build_phase(uvm_phase phase);
+  super.build_phase(phase);
   // #(parameter int NumRx = 4, parameter int NumTx = 4)
   // (Utopia.TB_Rx Rx[0:NumRx-1],
   //   Utopia.TB_Tx Tx[0:NumTx-1],
@@ -118,8 +124,6 @@ function void Test::build_phase(uvm_phase phase);
   // Miscellaneous control interfaces
   // logic Initialized;
 
-  super.build_phase(phase);
-
   // Create the environment
   // env = Environment::type_id::create(Rx, Tx, NumRx, NumTx, mif, "env", this);
   // env = Environment::type_id::create(null, null, null, null, null, "env", this);
@@ -127,6 +131,8 @@ function void Test::build_phase(uvm_phase phase);
   // seq = add_sub_sequence::type_id::create("seq");
 
   // env = new(Rx, Tx, NumRx, NumTx, mif);
+
+  atm_cell_test = new();
 
   $display("Simulation was run with conditional compilation settings of:");
   $display("`define TxPorts %0d", `TxPorts);
@@ -160,6 +166,7 @@ endfunction
 task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
+    atm_cell_test.print();
     // seq.start(env.agent.sequencer);
   phase.drop_objection(this);
   
