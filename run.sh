@@ -4,7 +4,7 @@ echo "	simulating... please wait"
 # {
   #run vsim
 
-  vsim -c -do ./scripts/3_simul.do
+  vsim -novopt -c -do ./scripts/3_simul.do
 
   #save log file
   mv transcript simulation.log

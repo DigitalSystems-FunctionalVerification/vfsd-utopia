@@ -64,6 +64,7 @@
  * INCLUDING INCIDENTAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF THE
  * USE OF THIS CODE.
  *********************************************************************/
+`include "uvm_test.sv"
 `timescale 1ns/1ns
 
 //`define SYNTHESIS	// conditional compilation flag for synthesis
@@ -94,6 +95,16 @@ module top;
   Utopia Tx[0:NumTx-1] ();	// NumTx x Level 1 Utopia Tx Interface
   cpu_ifc mif();	  // Intel-style Utopia parallel management interface
   squat #(NumRx, NumTx) squat(Rx, Tx, mif, rst, clk);	// DUT
-  test  #(NumRx, NumTx) t1(Rx, Tx, mif, rst, clk);	// Test
+  // test  #(NumRx, NumTx) t1(Rx, Tx, mif, rst, clk);	// Test
+
+  //enabling the wave dump
+  // initial begin
+  //   uvm_config_db#(virtual add_sub_if)::set(uvm_root::get(),"*","vif",duv_if);
+  //   $dumpfile("dump.vcd"); $dumpvars;
+  // end
+
+  initial begin
+    run_test("Test");
+  end
 
 endmodule : top
