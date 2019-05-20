@@ -160,6 +160,7 @@ function void Test::build_phase(uvm_phase phase);
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
   agent         = Agent::type_id::create("Agent", this);  
+  agent.ID      = 0;
 
   $display("Simulation was run with conditional compilation settings of:");
   $display("`define TxPorts %0d", `TxPorts);
@@ -191,7 +192,7 @@ endfunction : connect_phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
   //print's the topology
-  uvm_top.print_topology();
+  // uvm_top.print_topology();
   // uvm_factory::get().print();
 endfunction
 
@@ -202,9 +203,9 @@ task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
 
-  for (int i = 0; i < NumTx; i++) begin
+  // for (int i = 0; i < NumTx; i++) begin
     uni_sequence.start(agent.uni_sequencer_Tx);
-  end
+  // end
 
   phase.drop_objection(this);
   
@@ -218,7 +219,7 @@ endtask : run_phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
   // uni_sequence.print();
-  // uvm_config_db #(int)::dump();
+  uvm_config_db #(int)::dump();
   // for (int i = 0; i < NumTx; i++) begin
   //   agent.drivers_Tx[i].print();
   // end

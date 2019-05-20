@@ -34,14 +34,16 @@ class Agent extends uvm_agent;
   `uvm_component_utils(Agent)
 
   // uvm_analysis_port#(add_sub_seq_item) agent_mon_port;
+  
+   int ID;
 
    //--------------------------------------- 
    // Active agent's components
    //---------------------------------------
    Driver         driver_Tx;
-   Driver         driver_Rx;  
+   // Driver         driver_Rx;  
    UNI_sequencer  uni_sequencer_Tx;
-   UNI_sequencer  uni_sequencer_Rx;
+   // UNI_sequencer  uni_sequencer_Rx;
 
    //--------------------------------------- 
    // Passive agent's components
@@ -77,7 +79,8 @@ function void Agent::build_phase(uvm_phase phase);
    if(get_is_active() == UVM_ACTIVE)begin  // monitor active
 
       driver_Tx         = Driver::type_id::create("Driver_Tx", this);
-      driver_Rx         = Driver::type_id::create("Driver_Rx", this);
+      driver_Tx.PortID  = ID;
+      // driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       uni_sequencer_Tx  = UNI_sequencer::type_id::create("UNI_Sequencer_Tx", this);
       
    end
@@ -112,7 +115,7 @@ endfunction
 function void Agent::end_of_elaboration();
 
    // for (int i = 0; i < NumTx; i++) begin
-      // drivers_Tx[i].seq_item_port.debug_connected_to();
+      driver_Tx.seq_item_port.debug_connected_to();
       // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
    // end
 

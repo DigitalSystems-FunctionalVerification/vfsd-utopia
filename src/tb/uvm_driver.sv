@@ -47,8 +47,9 @@ endclass : Driver_cbs
 class Driver extends uvm_driver #(UNI_cell);
    `uvm_component_utils(Driver);
 
-   vUtopiaRx Tx;	      // Virtual interface for transmitting cells
-   vUtopiaRx Rx;	      // Virtual interface for transmitting cells
+   vUtopiaRx Tx;  // Virtual interface for transmitting cells
+   // vUtopiaRx Rx;  // Virtual interface for transmitting cells
+   int PortID;
  
    extern         function       new(string name, uvm_component parent);
    extern virtual function void  build_phase(uvm_phase phase);
@@ -62,14 +63,7 @@ endclass : Driver
 //---------------------------------------------------------------------------
 // new(): Construct a driver object
 //---------------------------------------------------------------------------
-function Driver::new(
-         //   input mailbox            gen2drv,
-		   //   input event              drv2gen,
-		   //   input                    Utopia Rx,
-		   //   input int                PortID,
-           string                   name,
-           uvm_component            parent);
-   
+function Driver::new(string name, uvm_component parent);   
    super.new(name, parent);
 
 endfunction : new 
@@ -80,7 +74,7 @@ endfunction : new
 //---------------------------------------------------------------------------
 function void Driver::build_phase(uvm_phase phase);
    super.build_phase(phase);
-   if(!uvm_config_db#(virtual Utopia)::get(this, "", "vUtopia_Tx", Tx))
+   if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Tx_%0d", PortID), Tx))
       `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Tx"});
 endfunction: build_phase
  
