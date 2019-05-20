@@ -49,6 +49,7 @@ class Agent extends uvm_agent;
   
    extern   function void  build_phase(uvm_phase phase);
    extern   function void  connect_phase(uvm_phase phase);
+   extern   function void  end_of_elaboration();
    extern   function       new(string name, uvm_component parent);
 
 endclass //Agent extends uvm_agent
@@ -85,7 +86,6 @@ function void Agent::build_phase(uvm_phase phase);
 
       for (int i = 0; i < NumTx; i++) begin
          uni_sequencers_Tx[i] = UNI_sequencer::type_id::create($sformatf("UNI_Sequencer_Tx_%0d", i), this);
-         drivers_Tx[i].PortID = i;
       end
 
       
@@ -114,6 +114,18 @@ function void Agent::connect_phase(uvm_phase phase);
    
    // connect monitor port to agent port
    // monitor.item_collected_port.connect(agent_mon_port);
+
+endfunction
+
+//---------------------------------------  function void Agent::end_of_elaboration(uvm_phase phase);
+// End of elaboration phase - debbuging connection
+//---------------------------------------
+function void Agent::end_of_elaboration();
+
+   // for (int i = 0; i < NumTx; i++) begin
+   //    drivers_Tx[i].seq_item_port.debug_connected_to();
+   //    // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
+   // end
 
 endfunction
 

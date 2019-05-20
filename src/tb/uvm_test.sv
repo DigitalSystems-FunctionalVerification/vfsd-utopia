@@ -88,7 +88,7 @@ class Test extends uvm_test;
   //--------------------------------------- 
   // Active agent's components
   //---------------------------------------
-  UNI_sequencer uni_sequencer;  
+  // UNI_sequencer uni_sequencer;  
   
   //---------------------------------------
   // sequence instance 
@@ -159,24 +159,7 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test.randomize();
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  agent         = Agent::type_id::create("Agent", this);
-
-  
-  //creating driver and sequencer only for ACTIVE agent
-  // if(get_is_active() == UVM_ACTIVE)begin  // monitor active
-    // driver    = add_sub_driver::type_id::create("driver", this);
-    uni_sequencer = UNI_sequencer::type_id::create("uni_sequencer", this);
-  // end
-
-  // for (int i = 0; i < NumTx; i++) begin
-  //   drivers_Tx[i] = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
-  //   drivers_Tx[i].PortID = i;
-  //   drivers_Rx[i] = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
-  //   drivers_Rx[i].PortID = i;
-  // end
-  
-
-  
+  agent         = Agent::type_id::create("Agent", this);  
 
   $display("Simulation was run with conditional compilation settings of:");
   $display("`define TxPorts %0d", `TxPorts);
@@ -208,7 +191,8 @@ endfunction : connect_phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
   //print's the topology
-  print();
+  uvm_top.print_topology();
+  // uvm_factory::get().print();
 endfunction
 
 //--------------------------------------- 
@@ -217,9 +201,8 @@ endfunction
 task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
-  // atm_cell_test.print();
-  // uni_sequence.start(uni_sequencer);
-  for (int i = 0; i < NumRx; i++) begin
+
+  for (int i = 0; i < NumTx; i++) begin
     uni_sequence.start(agent.uni_sequencers_Tx[i]);
   end
 
@@ -235,13 +218,13 @@ endtask : run_phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
   // uni_sequence.print();
-  uvm_config_db #(int)::dump();
-  for (int i = 0; i < NumTx; i++) begin
-    agent.drivers_Tx[i].print();
-  end
-  for (int i = 0; i < NumRx; i++) begin
-    agent.drivers_Rx[i].print();
-  end
+  // uvm_config_db #(int)::dump();
+  // for (int i = 0; i < NumTx; i++) begin
+  //   agent.drivers_Tx[i].print();
+  // end
+  // for (int i = 0; i < NumRx; i++) begin
+  //   agent.drivers_Rx[i].print();
+  // end
 endtask : post_main_phase;
 
 

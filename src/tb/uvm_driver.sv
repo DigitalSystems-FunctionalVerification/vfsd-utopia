@@ -50,12 +50,10 @@ class Driver extends uvm_driver #(UNI_cell);
    // mailbox gen2drv;	   // For cells sent from generator
    // event   drv2gen;	   // Tell generator when I am done with cell
    vUtopiaRx Rx;	      // Virtual interface for transmitting cells
-   Driver_cbs cbsq[$];  // Queue of callback objects
+   // Driver_cbs cbsq[$];  // Queue of callback objects
    int PortID;
    
-   extern function new(/*input mailbox gen2drv, input event drv2gen, 
-                        input vUtopiaRx Rx, input int PortID,*/
-                        string name, uvm_component parent);
+   extern         function       new(string name, uvm_component parent);
    extern virtual function void  build_phase(uvm_phase phase);
    extern         task           run();
    extern virtual task           drive();
@@ -96,13 +94,13 @@ endfunction: build_phase
 
 //---------------------------------------------------------------------------
 // run(): Run the driver. 
-// Get transaction from generator, send into DUT
+// Get transaction from sequencer, send into DUT
 //---------------------------------------------------------------------------
 task Driver::run();
 
    // forever begin
       // seq_item_port.get_next_item(req);
-      //respond_to_transfer(req);
+      // // respond_to_transfer(req);
       // drive();
       // seq_item_port.item_done();
    // end
@@ -140,6 +138,7 @@ endtask : run
 
 // drive
 task Driver::drive();
+   // @(posedge Rx.TopReceive.clk_in);
    req.print();
 endtask
 

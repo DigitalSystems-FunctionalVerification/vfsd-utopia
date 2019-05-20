@@ -41,15 +41,18 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
   // create, randomize and send the item to driver
   //---------------------------------------
    virtual task body();
-      int i = 0;
+      // int i = 0;
       repeat(2) begin
-         req = UNI_cell::type_id::create({"UNI_cell_%d", i});
+      // `uvm_create(req)
+      // `uvm_rand_send(req)
+         req = UNI_cell::type_id::create("req");
          wait_for_grant();
          req.randomize();
+         req.print();
          send_request(req);
          wait_for_item_done();
          req.print();
-         i++;
+         // i++;
       end 
    endtask
 
