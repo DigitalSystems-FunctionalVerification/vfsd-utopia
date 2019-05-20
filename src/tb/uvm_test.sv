@@ -95,6 +95,11 @@ class Test extends uvm_test;
   //---------------------------------------   
   UNI_sequence uni_sequence;
 
+  //---------------------------------------
+  // sequence instance 
+  //---------------------------------------   
+  Driver driver;
+
   // logic rst, clk;
 
   extern virtual  function void build_phase(uvm_phase phase);
@@ -155,6 +160,13 @@ function void Test::build_phase(uvm_phase phase);
     // driver    = add_sub_driver::type_id::create("driver", this);
     uni_generator = UNI_sequencer::type_id::create("uni_generator", this);
   // end
+
+  for (int i = 0; i < NumTx; i++) begin
+    driver = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
+    driver = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
+  end
+  
+
   
 
   $display("Simulation was run with conditional compilation settings of:");

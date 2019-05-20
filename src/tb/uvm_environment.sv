@@ -22,7 +22,7 @@
 `define ENVIRONMENT__SV
 
 // `include "generator.sv"
-// `include "driver.sv"
+`include "uvm_driver.sv"
 `include "uvm_monitor.sv"
 // `include "config.sv"
 // `include "scoreboard.sv"
