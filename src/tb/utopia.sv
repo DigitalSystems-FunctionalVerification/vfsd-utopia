@@ -69,41 +69,71 @@
 interface Utopia;
   parameter int IfWidth = 8;
 
+  //---------------------------------------
+  // declaring the signals
+  //---------------------------------------
+  //Configuration
+  bit clk_in;
+  bit clk_out;
+  //Control Information
+  bit soc;
+  bit en;
+  bit clav;
+  bit valid;
+  bit ready;
+  bit reset;
+  //Payload Information
   logic [IfWidth-1:0] data;
-  bit clk_in, clk_out;
-  bit soc, en, clav, valid, ready, reset;
-  wire selected;
+  ATMCellType         ATMcell;  // union of structures for ATM cells
+  //Analysis Information
+  wire selected;  
 
-  ATMCellType ATMcell;  // union of structures for ATM cells
-
+  //---------------------------------------
+  // TopReceive modport
+  //---------------------------------------
   modport TopReceive (
     input  data, soc, clav, 
     output clk_in, reset, ready, clk_out, en, ATMcell, valid );
 
+  //---------------------------------------
+  // TopTransmit modport
+  //---------------------------------------
   modport TopTransmit (
     input  clav, 
     inout  selected,
     output clk_in, clk_out, ATMcell, data, soc, en, valid, reset, ready );
 
+  //---------------------------------------
+  // CoreReceive modport
+  //---------------------------------------
   modport CoreReceive (
     input  clk_in, data, soc, clav, ready, reset,
     output clk_out, en, ATMcell, valid );
 
+  //---------------------------------------
+  // CoreTransmit modport
+  //---------------------------------------
   modport CoreTransmit (
     input  clk_in, clav, ATMcell, valid, reset,
     output clk_out, data, soc, en, ready );
 
-   clocking cbr @(negedge clk_out);
-      input clk_in, clk_out, ATMcell, valid, reset, en, ready;
-      output data, soc, clav;
-   endclocking : cbr
-   modport TB_Rx (clocking cbr);
+  //---------------------------------------
+  // monitor clocking block
+  //---------------------------------------
+  clocking cbr @(negedge clk_out);
+    input clk_in, clk_out, ATMcell, valid, reset, en, ready;
+    output data, soc, clav;
+  endclocking : cbr
+  modport TB_Rx (clocking cbr);
 
-   clocking cbt @(negedge clk_out);
-      input  clk_out, clk_in, ATMcell, soc, en, valid, reset, data, ready;
-      output clav;
-   endclocking : cbt
-   modport TB_Tx (clocking cbt);
+  //---------------------------------------
+  // driver clocking block
+  //---------------------------------------
+  clocking cbt @(negedge clk_out);
+    input  clk_out, clk_in, ATMcell, soc, en, valid, reset, data, ready;
+    output clav;
+  endclocking : cbt
+  modport TB_Tx (clocking cbt);
 
 endinterface
 

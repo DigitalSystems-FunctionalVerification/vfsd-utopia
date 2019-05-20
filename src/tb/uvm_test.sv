@@ -199,10 +199,11 @@ task Test::run_phase(uvm_phase phase);
 endtask : run_phase
 
 //--------------------------------------- 
-// Run phase
+// Post main phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
-  uni_sequence.print();
+  // uni_sequence.print();
+  uvm_config_db #(int)::dump();
 endtask : post_main_phase;
 
 

@@ -94,14 +94,19 @@ module top;
   Utopia Rx[0:NumRx-1] ();	// NumRx x Level 1 Utopia Rx Interface
   Utopia Tx[0:NumTx-1] ();	// NumTx x Level 1 Utopia Tx Interface
   cpu_ifc mif();	  // Intel-style Utopia parallel management interface
+
+  Utopia vUtopia_Rx ();
+  Utopia vUtopia_Tx ();
+
   squat #(NumRx, NumTx) squat(Rx, Tx, mif, rst, clk);	// DUT
   // test  #(NumRx, NumTx) t1(Rx, Tx, mif, rst, clk);	// Test
 
-  //enabling the wave dump
-  // initial begin
-  //   uvm_config_db#(virtual add_sub_if)::set(uvm_root::get(),"*","vif",duv_if);
-  //   $dumpfile("dump.vcd"); $dumpvars;
-  // end
+  initial begin
+    for (int i = 0; i < NumRx; i++) begin
+      uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Rx_%0d",i),vUtopia_Rx);  
+      uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Tx_%0d",i),vUtopia_Tx);  
+    end
+  end
 
   initial begin
     run_test("Test");

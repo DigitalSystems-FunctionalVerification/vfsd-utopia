@@ -48,6 +48,7 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
          req.randomize();
          send_request(req);
          wait_for_item_done();
+         req.print();
          i++;
       end 
    endtask
