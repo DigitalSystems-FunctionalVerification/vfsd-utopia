@@ -228,7 +228,6 @@ task Test::post_main_phase(uvm_phase phase);
 endtask : post_main_phase;
 
 
-
 //---------------------------------------
 // report phase
 //---------------------------------------   

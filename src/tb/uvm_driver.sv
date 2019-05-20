@@ -49,7 +49,7 @@ class Driver extends uvm_driver #(UNI_cell);
 
    // mailbox gen2drv;	   // For cells sent from generator
    // event   drv2gen;	   // Tell generator when I am done with cell
-   // vUtopiaRx Rx;	      // Virtual interface for transmitting cells
+   vUtopiaRx Rx;	      // Virtual interface for transmitting cells
    Driver_cbs cbsq[$];  // Queue of callback objects
    int PortID;
    
@@ -69,7 +69,7 @@ endclass : Driver
 function Driver::new(
          //   input mailbox            gen2drv,
 		   //   input event              drv2gen,
-		   //   input                    Utopia Tx,
+		   //   input                    Utopia Rx,
 		   //   input int                PortID,
            string                   name,
            uvm_component            parent);
@@ -88,8 +88,8 @@ endfunction : new
 //---------------------------------------------------------------------------
 function void Driver::build_phase(uvm_phase phase);
    super.build_phase(phase);
-   // if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Tx_%0d", PortID), Tx))
-   //    `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Tx"});
+   if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", PortID), Rx))
+      `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Rx"});
 endfunction: build_phase
  
 
