@@ -47,9 +47,12 @@ endclass : Driver_cbs
 class Driver extends uvm_driver #(UNI_cell);
    `uvm_component_utils(Driver);
 
-   vUtopiaRx Tx;	      // Virtual interface for transmitting cells
+   // mailbox gen2drv;	   // For cells sent from generator
+   // event   drv2gen;	   // Tell generator when I am done with cell
    vUtopiaRx Rx;	      // Virtual interface for transmitting cells
- 
+   // Driver_cbs cbsq[$];  // Queue of callback objects
+   int PortID;
+   
    extern         function       new(string name, uvm_component parent);
    extern virtual function void  build_phase(uvm_phase phase);
    extern         task           run();
@@ -72,6 +75,10 @@ function Driver::new(
    
    super.new(name, parent);
 
+   // this.gen2drv = gen2drv;
+   // this.drv2gen = drv2gen;
+   // this.Rx      = Rx;
+   this.PortID  = PortID;
 endfunction : new 
 
 //---------------------------------------------------------------------------
@@ -80,8 +87,8 @@ endfunction : new
 //---------------------------------------------------------------------------
 function void Driver::build_phase(uvm_phase phase);
    super.build_phase(phase);
-   if(!uvm_config_db#(virtual Utopia)::get(this, "", "vUtopia_Tx", Tx))
-      `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Tx"});
+   if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", PortID), Rx))
+      `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Rx"});
 endfunction: build_phase
  
 
@@ -91,12 +98,12 @@ endfunction: build_phase
 //---------------------------------------------------------------------------
 task Driver::run();
 
-   forever begin
-      seq_item_port.get_next_item(req);
-      // respond_to_transfer(req);
-      drive();
-      seq_item_port.item_done();
-   end
+   // forever begin
+      // seq_item_port.get_next_item(req);
+      // // respond_to_transfer(req);
+      // drive();
+      // seq_item_port.item_done();
+   // end
    
    // UNI_cell c;
    // bit drop = 0;

@@ -101,12 +101,31 @@ module top;
   squat #(NumRx, NumTx) squat(Rx, Tx, mif, rst, clk);	// DUT
   // test  #(NumRx, NumTx) t1(Rx, Tx, mif, rst, clk);	// Test
 
-  initial begin
+  generate
 
-    uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*","vUtopia_Tx", vUtopia_Tx);  
-    uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*","vUtopia_Rx", vUtopia_Rx);  
+    for(genvar i=0; i < `RxPorts; i++)
+    begin: Rx_gen            
+        initial uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Rx_%0d",i), Rx[i]);  
+    end
 
-  end
+    for(genvar i=0; i < `TxPorts; i++)
+    begin: Tx_gen            
+        initial uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Tx_%0d",i), Tx[i]);  
+    end
+
+  endgenerate
+
+  // initial begin
+
+    // for (int i = 0; i < `RxPorts; i++) begin
+    //   uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Rx_%0d",i), Rx[i]);  
+    // end
+
+    // for (int i = 0; i < NumTx; i++) begin
+    //   uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Tx_%0d",i), Tx[i]);  
+    // end
+
+  // end
 
   initial begin
     run_test("Test");

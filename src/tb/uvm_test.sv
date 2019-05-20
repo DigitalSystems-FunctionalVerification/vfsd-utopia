@@ -203,7 +203,7 @@ task Test::run_phase(uvm_phase phase);
   phase.raise_objection(this);
 
   for (int i = 0; i < NumTx; i++) begin
-    uni_sequence.start(agent.uni_sequencer_Tx);
+    uni_sequence.start(agent.uni_sequencers_Tx[i]);
   end
 
   phase.drop_objection(this);
