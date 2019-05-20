@@ -7,6 +7,7 @@ vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_atm_cell.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/atm_cell.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/utopia.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/driver.sv 
+vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_driver.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/cpu_ifc.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/cpu_driver.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_environment.sv 
