@@ -96,9 +96,10 @@ class Test extends uvm_test;
   UNI_sequence uni_sequence;
 
   //---------------------------------------
-  // sequence instance 
+  // drivers instance 
   //---------------------------------------   
-  Driver driver;
+  Driver drivers_Tx[NumTx];
+  Driver drivers_Rx[NumRx];  
 
   // logic rst, clk;
 
@@ -162,8 +163,10 @@ function void Test::build_phase(uvm_phase phase);
   // end
 
   for (int i = 0; i < NumTx; i++) begin
-    driver = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
-    driver = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
+    drivers_Tx[i] = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
+    drivers_Tx[i].PortID = i;
+    drivers_Rx[i] = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
+    drivers_Rx[i].PortID = i;
   end
   
 
@@ -216,6 +219,12 @@ endtask : run_phase
 task Test::post_main_phase(uvm_phase phase);
   // uni_sequence.print();
   uvm_config_db #(int)::dump();
+  for (int i = 0; i < NumTx; i++) begin
+    drivers_Tx[i].print();
+  end
+  for (int i = 0; i < NumRx; i++) begin
+    drivers_Rx[i].print();
+  end
 endtask : post_main_phase;
 
 
