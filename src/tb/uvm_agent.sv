@@ -87,9 +87,6 @@ function void Agent::build_phase(uvm_phase phase);
       for (int i = 0; i < NumTx; i++) begin
          uni_sequencers_Tx[i] = UNI_sequencer::type_id::create($sformatf("UNI_Sequencer_Tx_%0d", i), this);
       end
-
-      
-
    end
 endfunction
 
@@ -123,8 +120,8 @@ endfunction
 function void Agent::end_of_elaboration();
 
    // for (int i = 0; i < NumTx; i++) begin
-   //    drivers_Tx[i].seq_item_port.debug_connected_to();
-   //    // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
+      // drivers_Tx[i].seq_item_port.debug_connected_to();
+      // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
    // end
 
 endfunction
