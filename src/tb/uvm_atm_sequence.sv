@@ -40,15 +40,17 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
   //---------------------------------------
   // create, randomize and send the item to driver
   //---------------------------------------
-  virtual task body();
-   repeat(2) begin
-      req = UNI_cell::type_id::create("req");
-      wait_for_grant();
-      req.randomize();
-      send_request(req);
-      wait_for_item_done();
-   end 
-  endtask
+   virtual task body();
+      int i = 0;
+      repeat(2) begin
+         req = UNI_cell::type_id::create({"UNI_cell_%d", i});
+         wait_for_grant();
+         req.randomize();
+         send_request(req);
+         wait_for_item_done();
+         i++;
+      end 
+   endtask
 
    // UNI_cell blueprint;	// Blueprint for generator
    // mailbox  gen2drv;	// Mailbox to driver for cells
@@ -83,7 +85,31 @@ endclass : UNI_sequence
 
 
 /////////////////////////////////////////////////////////////////////////////
-// class NNI_sequence;
+class NNI_sequence extends uvm_sequence#(NNI_cell);
+
+   `uvm_object_utils(NNI_sequence)
+   
+   //--------------------------------------- 
+   // Constructor
+   //---------------------------------------
+   function new(string name = "NNI_sequence");
+      super.new(name);
+   endfunction //new()
+
+   // `uvm_declare_p_sequencer(add_sub_sequencer)
+   
+   //---------------------------------------
+   // create, randomize and send the item to driver
+   //---------------------------------------
+   virtual task body();
+      repeat(2) begin
+         req = NNI_cell::type_id::create("req");
+         wait_for_grant();
+         req.randomize();
+         send_request(req);
+         wait_for_item_done();
+      end 
+   endtask
 
 //    NNI_cell blueprint;	// Blueprint for generator
 //    mailbox  gen2drv;	// Mailbox to driver for cells
@@ -114,6 +140,6 @@ endclass : UNI_sequence
 //       end
 //    endtask : run
 
-// endclass : NNI_generator
+endclass : NNI_sequence
 
 `endif // SEQUENCE__SV

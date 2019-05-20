@@ -70,6 +70,7 @@
 
 `include "definitions.sv"  // include external definitions
 `include "uvm_environment.sv"
+`include "uvm_generator.sv"
 
 class Test extends uvm_test;
   `uvm_component_utils(Test)
@@ -82,13 +83,24 @@ class Test extends uvm_test;
   //---------------------------------------
   // atm_cell instance 
   //---------------------------------------
-  UNI_cell atm_cell_test;
+  // UNI_cell atm_cell_test;
+
+  //--------------------------------------- 
+  // Active agent's components
+  //---------------------------------------
+  UNI_generator uni_generator;  
+  
+  //---------------------------------------
+  // sequence instance 
+  //---------------------------------------   
+  UNI_sequence uni_sequence;
 
   // logic rst, clk;
 
   extern virtual  function void build_phase(uvm_phase phase);
   extern virtual  function void end_of_elaboration();
   extern          task          run_phase(uvm_phase phase);
+  extern          task          post_main_phase(uvm_phase phase);
   extern          function void report_phase(uvm_phase phase);
   extern          function      new(string name = "Test", uvm_component parent=null);
 
@@ -132,8 +144,17 @@ function void Test::build_phase(uvm_phase phase);
 
   // env = new(Rx, Tx, NumRx, NumTx, mif);
 
-  atm_cell_test = UNI_cell::type_id::create("atm_cell_test");
-  atm_cell_test.randomize();
+  // atm_cell_test = UNI_cell::type_id::create("atm_cell_test");
+  // atm_cell_test.randomize();
+  // Create the sequence
+  uni_sequence = UNI_sequence::type_id::create("uni_sequence");
+
+  
+  //creating driver and sequencer only for ACTIVE agent
+  // if(get_is_active() == UVM_ACTIVE)begin  // monitor active
+    // driver    = add_sub_driver::type_id::create("driver", this);
+    uni_generator = UNI_generator::type_id::create("uni_generator", this);
+  // end
   
 
   $display("Simulation was run with conditional compilation settings of:");
@@ -168,14 +189,22 @@ endfunction
 task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
-    atm_cell_test.print();
-    // seq.start(env.agent.sequencer);
+    // atm_cell_test.print();
+    uni_sequence.start(uni_generator);
   phase.drop_objection(this);
   
   //set a drain-time for the environment if desired
   phase.phase_done.set_drain_time(this, 50);
 
 endtask : run_phase
+
+//--------------------------------------- 
+// Run phase
+//---------------------------------------
+task Test::post_main_phase(uvm_phase phase);
+  uni_sequence.print();
+endtask : post_main_phase;
+
 
 
 //---------------------------------------
@@ -196,4 +225,5 @@ function void Test::report_phase(uvm_phase phase);
     `uvm_info(get_type_name(), "----           TEST PASS           ----", UVM_NONE)
     `uvm_info(get_type_name(), "---------------------------------------", UVM_NONE)
   end
+
 endfunction

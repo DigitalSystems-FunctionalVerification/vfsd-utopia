@@ -17,7 +17,7 @@ vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_monitor.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/monitor.sv 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/generator.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_atm_sequence.sv
-#vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_generator.sv
+vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_generator.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/LookupTable.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/dut/utopia1_atm_rx.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/dut/utopia1_atm_tx.sv  
