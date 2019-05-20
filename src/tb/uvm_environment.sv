@@ -21,9 +21,9 @@
 `ifndef ENVIRONMENT__SV
 `define ENVIRONMENT__SV
 
-// `include "generator.sv"
-`include "uvm_driver.sv"
-`include "uvm_monitor.sv"
+`include "uvm_agent.sv"
+// `include "uvm_driver.sv"
+// `include "uvm_monitor.sv"
 // `include "config.sv"
 // `include "scoreboard.sv"
 // `include "coverage.sv"

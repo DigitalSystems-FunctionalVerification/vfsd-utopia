@@ -56,8 +56,9 @@ class Driver extends uvm_driver #(UNI_cell);
    extern function new(/*input mailbox gen2drv, input event drv2gen, 
                         input vUtopiaRx Rx, input int PortID,*/
                         string name, uvm_component parent);
-   extern virtual  function void build_phase(uvm_phase phase);
-   extern task run();
+   extern virtual function void  build_phase(uvm_phase phase);
+   extern         task           run();
+   extern virtual task           drive();
    // extern task send (input UNI_cell c);
 
 endclass : Driver
@@ -98,6 +99,14 @@ endfunction: build_phase
 // Get transaction from generator, send into DUT
 //---------------------------------------------------------------------------
 task Driver::run();
+
+   // forever begin
+      // seq_item_port.get_next_item(req);
+      //respond_to_transfer(req);
+      // drive();
+      // seq_item_port.item_done();
+   // end
+   
    // UNI_cell c;
    // bit drop = 0;
 
@@ -128,6 +137,11 @@ task Driver::run();
    //    ->drv2gen;	  // Tell the generator we are done with this cell
    // end
 endtask : run
+
+// drive
+task Driver::drive();
+   req.print();
+endtask
 
 
 //---------------------------------------------------------------------------

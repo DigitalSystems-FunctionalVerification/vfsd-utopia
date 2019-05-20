@@ -88,7 +88,7 @@ class Test extends uvm_test;
   //--------------------------------------- 
   // Active agent's components
   //---------------------------------------
-  UNI_sequencer uni_generator;  
+  UNI_sequencer uni_sequencer;  
   
   //---------------------------------------
   // sequence instance 
@@ -96,14 +96,20 @@ class Test extends uvm_test;
   UNI_sequence uni_sequence;
 
   //---------------------------------------
-  // drivers instance 
+  // Agent
   //---------------------------------------   
+  Agent agent;
+
+  // //---------------------------------------
+  // // drivers instance 
+  // //---------------------------------------   
   Driver drivers_Tx[NumTx];
   Driver drivers_Rx[NumRx];  
 
   // logic rst, clk;
 
   extern virtual  function void build_phase(uvm_phase phase);
+  extern          function void connect_phase(uvm_phase phase);
   extern virtual  function void end_of_elaboration();
   extern          task          run_phase(uvm_phase phase);
   extern          task          post_main_phase(uvm_phase phase);
@@ -153,13 +159,14 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test = UNI_cell::type_id::create("atm_cell_test");
   // atm_cell_test.randomize();
   // Create the sequence
-  uni_sequence = UNI_sequence::type_id::create("uni_sequence");
+  uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
+  // agent         = Agent::type_id::create("Agent", this);
 
   
   //creating driver and sequencer only for ACTIVE agent
   // if(get_is_active() == UVM_ACTIVE)begin  // monitor active
     // driver    = add_sub_driver::type_id::create("driver", this);
-    uni_generator = UNI_sequencer::type_id::create("uni_generator", this);
+    uni_sequencer = UNI_sequencer::type_id::create("uni_sequencer", this);
   // end
 
   for (int i = 0; i < NumTx; i++) begin
@@ -191,6 +198,13 @@ function void Test::build_phase(uvm_phase phase);
 endfunction
 
 //---------------------------------------
+// Connect phase - connecting monitor and scoreboard port
+//---------------------------------------
+function void Test::connect_phase(uvm_phase phase);
+  // agent.monitor.item_collected_port.connect(scoreboard.item_collected_export);
+endfunction : connect_phase
+
+//---------------------------------------
 // end_of_elabaration phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
@@ -205,7 +219,7 @@ task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
     // atm_cell_test.print();
-    uni_sequence.start(uni_generator);
+    uni_sequence.start(uni_sequencer);
   phase.drop_objection(this);
   
   //set a drain-time for the environment if desired
