@@ -98,13 +98,13 @@ class Test extends uvm_test;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  Agent agent;
+  Agent agents[NumTx];
 
   // //---------------------------------------
   // // drivers instance 
   // //---------------------------------------   
-  Driver drivers_Tx[NumTx];
-  Driver drivers_Rx[NumRx];  
+  // Driver drivers_Tx[NumTx];
+  // Driver drivers_Rx[NumRx];  
 
   // logic rst, clk;
 
@@ -159,8 +159,11 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test.randomize();
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  agent         = Agent::type_id::create("Agent", this);  
-  agent.ID      = 0;
+  for (int i = 0; i < NumTx; i++) begin
+    agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
+    agents[i].ID  = i;  
+  end
+  
 
   $display("Simulation was run with conditional compilation settings of:");
   $display("`define TxPorts %0d", `TxPorts);
@@ -203,9 +206,9 @@ task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
 
-  // for (int i = 0; i < NumTx; i++) begin
-    uni_sequence.start(agent.uni_sequencer_Tx);
-  // end
+  for (int i = 0; i < NumTx; i++) begin
+    uni_sequence.start(agents[i].uni_sequencer_Tx);
+  end
 
   phase.drop_objection(this);
   
