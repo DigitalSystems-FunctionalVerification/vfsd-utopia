@@ -125,7 +125,6 @@ function Test::new(string name = "Test", uvm_component parent=null);
   super.new(name, parent);
 endfunction
 
-
 //--------------------------------------- 
 // Build phase
 //---------------------------------------
@@ -160,7 +159,7 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test.randomize();
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  // agent         = Agent::type_id::create("Agent", this);
+  agent         = Agent::type_id::create("Agent", this);
 
   
   //creating driver and sequencer only for ACTIVE agent
@@ -169,12 +168,12 @@ function void Test::build_phase(uvm_phase phase);
     uni_sequencer = UNI_sequencer::type_id::create("uni_sequencer", this);
   // end
 
-  for (int i = 0; i < NumTx; i++) begin
-    drivers_Tx[i] = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
-    drivers_Tx[i].PortID = i;
-    drivers_Rx[i] = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
-    drivers_Rx[i].PortID = i;
-  end
+  // for (int i = 0; i < NumTx; i++) begin
+  //   drivers_Tx[i] = Driver::type_id::create($sformatf("Driver_TX_%0d", i), this);
+  //   drivers_Tx[i].PortID = i;
+  //   drivers_Rx[i] = Driver::type_id::create($sformatf("Driver_RX_%0d", i), this);
+  //   drivers_Rx[i].PortID = i;
+  // end
   
 
   
@@ -218,8 +217,12 @@ endfunction
 task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
-    // atm_cell_test.print();
-    uni_sequence.start(uni_sequencer);
+  // atm_cell_test.print();
+  // uni_sequence.start(uni_sequencer);
+  for (int i = 0; i < NumRx; i++) begin
+    uni_sequence.start(agent.uni_sequencers_Tx[i]);
+  end
+
   phase.drop_objection(this);
   
   //set a drain-time for the environment if desired
@@ -234,10 +237,10 @@ task Test::post_main_phase(uvm_phase phase);
   // uni_sequence.print();
   uvm_config_db #(int)::dump();
   for (int i = 0; i < NumTx; i++) begin
-    drivers_Tx[i].print();
+    agent.drivers_Tx[i].print();
   end
   for (int i = 0; i < NumRx; i++) begin
-    drivers_Rx[i].print();
+    agent.drivers_Rx[i].print();
   end
 endtask : post_main_phase;
 
