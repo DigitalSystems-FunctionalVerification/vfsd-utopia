@@ -88,7 +88,7 @@ endclass : Cov_Monitor_cbs
 
 /////////////////////////////////////////////////////////
 class Environment;
-   UNI_generator gen[];
+   UNI_sequencer gen[];
    mailbox gen2drv[];
    event   drv2gen[];
    Driver drv[];

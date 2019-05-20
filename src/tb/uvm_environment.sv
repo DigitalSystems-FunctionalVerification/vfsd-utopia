@@ -88,7 +88,7 @@
 
 /////////////////////////////////////////////////////////
 class Environment extends uvm_env;
-   // UNI_generator gen[];
+   // UNI_sequencer gen[];
    // mailbox gen2drv[];
    // event   drv2gen[];
    // Driver drv[];

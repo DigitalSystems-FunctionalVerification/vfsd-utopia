@@ -70,7 +70,7 @@
 
 `include "definitions.sv"  // include external definitions
 `include "uvm_environment.sv"
-`include "uvm_generator.sv"
+`include "uvm_atm_sequencer.sv"
 
 class Test extends uvm_test;
   `uvm_component_utils(Test)
@@ -88,7 +88,7 @@ class Test extends uvm_test;
   //--------------------------------------- 
   // Active agent's components
   //---------------------------------------
-  UNI_generator uni_generator;  
+  UNI_sequencer uni_generator;  
   
   //---------------------------------------
   // sequence instance 
@@ -153,7 +153,7 @@ function void Test::build_phase(uvm_phase phase);
   //creating driver and sequencer only for ACTIVE agent
   // if(get_is_active() == UVM_ACTIVE)begin  // monitor active
     // driver    = add_sub_driver::type_id::create("driver", this);
-    uni_generator = UNI_generator::type_id::create("uni_generator", this);
+    uni_generator = UNI_sequencer::type_id::create("uni_generator", this);
   // end
   
 

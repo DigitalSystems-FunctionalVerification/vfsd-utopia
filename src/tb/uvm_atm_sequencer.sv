@@ -24,8 +24,8 @@
 `include "uvm_atm_sequence.sv"
 
 /////////////////////////////////////////////////////////////////////////////
-class UNI_generator extends uvm_sequencer#(UNI_cell);
-   `uvm_sequencer_utils(UNI_generator)
+class UNI_sequencer extends uvm_sequencer#(UNI_cell);
+   `uvm_sequencer_utils(UNI_sequencer)
       
   //--------------------------------------- 
   // Constructor
@@ -62,13 +62,13 @@ class UNI_generator extends uvm_sequencer#(UNI_cell);
    //    end
    // endtask : run
 
-endclass : UNI_generator
+endclass : UNI_sequencer
 
 
 
 /////////////////////////////////////////////////////////////////////////////
-class NNI_generator extends uvm_sequencer#(NNI_cell);
-   `uvm_sequencer_utils(NNI_generator)
+class NNI_sequencer extends uvm_sequencer#(NNI_cell);
+   `uvm_sequencer_utils(NNI_sequencer)
 
    //--------------------------------------- 
    // Constructor
@@ -106,6 +106,6 @@ class NNI_generator extends uvm_sequencer#(NNI_cell);
    //    end
    // endtask : run
 
-endclass : NNI_generator
+endclass : NNI_sequencer
 
 `endif // GENERATOR__SV

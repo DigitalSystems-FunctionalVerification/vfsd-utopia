@@ -24,7 +24,7 @@
 
 
 /////////////////////////////////////////////////////////////////////////////
-class UNI_generator;
+class UNI_sequencer;
 
    UNI_cell blueprint;	// Blueprint for generator
    mailbox  gen2drv;	// Mailbox to driver for cells
@@ -54,12 +54,12 @@ class UNI_generator;
       end
    endtask : run
 
-endclass : UNI_generator
+endclass : UNI_sequencer
 
 
 
 /////////////////////////////////////////////////////////////////////////////
-class NNI_generator;
+class NNI_sequencer;
 
    NNI_cell blueprint;	// Blueprint for generator
    mailbox  gen2drv;	// Mailbox to driver for cells
@@ -90,6 +90,6 @@ class NNI_generator;
       end
    endtask : run
 
-endclass : NNI_generator
+endclass : NNI_sequencer
 
 `endif // GENERATOR__SV
