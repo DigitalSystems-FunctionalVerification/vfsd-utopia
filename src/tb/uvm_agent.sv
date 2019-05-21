@@ -87,19 +87,25 @@ endfunction
 function void Agent::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
 
-   // connect driver monitor to sequencer port
+   // connect driver to sequencer port
    if(get_is_active() == UVM_ACTIVE) begin
       driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);      
    end
 
-endfunction
+   // connect monitor port to agent port
+   // monitor.item_collected_port.connect(agent_mon_port);
+
+endfunction  
+   
+
 
 //---------------------------------------  
 // End of elaboration phase - debbuging connection
 //---------------------------------------
 function void Agent::end_of_elaboration();
 
-   driver_Rx.seq_item_port.debug_connected_to();
+   // driver_Rx.seq_item_port.debug_connected_to();
+   monitor_Tx.item_collected_port.debug_connected_to();
 
 endfunction
 
