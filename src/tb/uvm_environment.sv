@@ -25,16 +25,23 @@
 // `include "uvm_driver.sv"
 // `include "uvm_monitor.sv"
 // `include "config.sv"
-// `include "scoreboard.sv"
+`include "uvm_scoreboard.sv"
 // `include "coverage.sv"
 // `include "cpu_ifc.sv"
 // `include "cpu_driver.sv"
 
 class Environment extends uvm_env;
- 
-//   Agent agent;
-   
-  `uvm_component_utils(Environment)
+   `uvm_component_utils(Environment)
+
+  //---------------------------------------
+  // Agent
+  //---------------------------------------   
+  Agent agents[NumRx];
+
+  //---------------------------------------
+  // Scoreboard
+  //---------------------------------------   
+  Scoreboard scoreboard;
      
   // new - constructor
   function new(string name, uvm_component parent);
@@ -42,10 +49,17 @@ class Environment extends uvm_env;
   endfunction : new
  
   // build_phase
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-   //  agent = Agent::type_id::create("mem_agnt", this);
-  endfunction : build_phase
+   function void build_phase(uvm_phase phase);
+      super.build_phase(phase);
+
+      for (int i = 0; i < NumRx; i++) begin
+         agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
+         agents[i].ID  = i;  
+      end
+
+      scoreboard = Scoreboard::type_id::create("Scoreboard", this);
+
+   endfunction : build_phase
  
 endclass : Environment
 

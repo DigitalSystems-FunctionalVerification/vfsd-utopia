@@ -55,8 +55,8 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   trans_collected = new();
-   item_collected_port = new("item_collected_port", this);
+   trans_collected      = new();
+   item_collected_port  = new("item_collected_port", this);
 
 endfunction : new
 
@@ -87,11 +87,13 @@ endtask : run_phase
 //---------------------------------------------------------------------------
 task Monitor::monitor();
    // forever begin
+
+   //    // @(posedge Tx.clk_out);
+   //    //   trans_collected = Tx.ATMcell;        
+
    //    item_collected_port.write(trans_collected);
-   // end
-   // @(posedge Rx.TopReceive.clk_in);
-   // req.print();
-   // $display("monitoring");
+
+   //  end
 endtask
 
 `endif // MONITOR__SV

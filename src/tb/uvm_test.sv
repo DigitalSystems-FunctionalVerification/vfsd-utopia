@@ -98,7 +98,12 @@ class Test extends uvm_test;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  Agent agents[NumRx];
+  // Agent agents[NumRx];
+
+  //---------------------------------------
+  // Agent
+  //---------------------------------------   
+  Environment environment;
 
   // //---------------------------------------
   // // drivers instance 
@@ -148,6 +153,7 @@ function void Test::build_phase(uvm_phase phase);
   // logic Initialized;
 
   // Create the environment
+  environment = Environment::type_id::create("Environment", this);
   // env = Environment::type_id::create(Rx, Tx, NumRx, NumTx, mif, "env", this);
   // env = Environment::type_id::create(null, null, null, null, null, "env", this);
   // Create the sequence
@@ -159,10 +165,10 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test.randomize();
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  for (int i = 0; i < NumRx; i++) begin
-    agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
-    agents[i].ID  = i;  
-  end
+  // for (int i = 0; i < NumRx; i++) begin
+  //   agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
+  //   agents[i].ID  = i;  
+  // end
   
 
   $display("Simulation was run with conditional compilation settings of:");
@@ -210,7 +216,7 @@ task Test::run_phase(uvm_phase phase);
   phase.raise_objection(this);
 
   for (int i = 0; i < NumRx; i++) begin
-    uni_sequence.start(agents[i].uni_sequencer_Rx);
+    uni_sequence.start(environment.agents[i].uni_sequencer_Rx);
   end
 
   phase.drop_objection(this);

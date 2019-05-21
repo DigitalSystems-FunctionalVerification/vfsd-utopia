@@ -118,7 +118,7 @@ interface Utopia;
     output clk_out, data, soc, en, ready );
 
   //---------------------------------------
-  // monitor clocking block
+  // driver clocking block
   //---------------------------------------
   clocking cbr @(negedge clk_out);
     input clk_in, clk_out, ATMcell, valid, reset, en, ready;
@@ -127,7 +127,7 @@ interface Utopia;
   modport TB_Rx (clocking cbr);
 
   //---------------------------------------
-  // driver clocking block
+  // monitor clocking block
   //---------------------------------------
   clocking cbt @(negedge clk_out);
     input  clk_out, clk_in, ATMcell, soc, en, valid, reset, data, ready;
