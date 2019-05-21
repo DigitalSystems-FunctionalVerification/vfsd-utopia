@@ -78,8 +78,16 @@ endtask : run_phase
 // drive
 //---------------------------------------------------------------------------
 task Driver::drive();
-   // @(posedge Rx.TopReceive.clk_in);
-   // req.print();
+   req.print();
+   @(posedge Rx.cbr.clk_in);
+      Rx.cbr.ATMcell.uni.GFC      <= req.GFC;
+      Rx.cbr.ATMcell.uni.VPI      <= req.VPI;
+      Rx.cbr.ATMcell.uni.VCI      <= req.VCI;
+      Rx.cbr.ATMcell.uni.CLP      <= req.CLP;
+      Rx.cbr.ATMcell.uni.PT       <= req.PT;
+      Rx.cbr.ATMcell.uni.HEC      <= req.HEC;
+      Rx.cbr.ATMcell.uni.Payload  <= req.Payload;
+   
 endtask
 
 `endif // DRIVER__SV
