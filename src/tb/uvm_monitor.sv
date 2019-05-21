@@ -86,14 +86,20 @@ endtask : run_phase
 // monitor
 //---------------------------------------------------------------------------
 task Monitor::monitor();
-   // forever begin
+   forever begin
 
-   //    // @(posedge Tx.clk_out);
-   //    //   trans_collected = Tx.ATMcell;        
+      @(posedge Tx.cbt.clk_out);
+         trans_collected.VPI       <= Tx.cbt.ATMcell.uni.VPI;
+         trans_collected.VCI       <= Tx.cbt.ATMcell.uni.VCI;
+         trans_collected.CLP       <= Tx.cbt.ATMcell.uni.CLP;
+         trans_collected.PT        <= Tx.cbt.ATMcell.uni.PT;
+         trans_collected.HEC       <= Tx.cbt.ATMcell.uni.HEC;
+         trans_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
 
-   //    item_collected_port.write(trans_collected);
+      item_collected_port.write(trans_collected);
+      trans_collected.print();
 
-   //  end
+    end
 endtask
 
 `endif // MONITOR__SV
