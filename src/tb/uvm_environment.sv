@@ -57,9 +57,9 @@ class Environment extends uvm_env;
 
    virtual function void connect_phase (uvm_phase phase);
       super.connect_phase (phase);
-      // for (int i = 0; i < NumRx; i++) begin
-      //    agents[i].monitor_Tx.analysis_port.connect(scoreboard.item_collected_export);
-      // end
+      for (int i = 0; i < NumRx; i++) begin
+         agents[i].monitor_Tx.item_collected_port.connect(scoreboard.item_collected_export);
+      end
     
   endfunction
  

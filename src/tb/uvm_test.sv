@@ -156,7 +156,7 @@ endtask : run_phase
 // Post main phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
-  // uvm_config_db #(int)::dump();
+  uvm_config_db #(int)::dump();
 endtask : post_main_phase;
 
 //---------------------------------------

@@ -27,7 +27,7 @@ class Scoreboard extends uvm_scoreboard;
  
   `uvm_component_utils(Scoreboard)
 
-  uvm_analysis_imp#(UNI_cell, Scoreboard) item_collected_export;
+  uvm_analysis_imp#(NNI_cell, Scoreboard) item_collected_export;
  
   // new - constructor
   function new (string name, uvm_component parent);
@@ -40,7 +40,7 @@ class Scoreboard extends uvm_scoreboard;
   endfunction: build_phase
    
   // write
-  virtual function void write(UNI_cell pkt);
+  virtual function void write(NNI_cell pkt);
     $display("SCB:: Pkt recived");
     pkt.print();
   endfunction : write

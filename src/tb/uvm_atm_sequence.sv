@@ -37,6 +37,7 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
   
   //---------------------------------------
   // create, randomize and send the item to driver
+  // from: https://www.verificationguide.com/p/uvm-sequence.html
   //---------------------------------------
    virtual task body();
       `uvm_create(req)
