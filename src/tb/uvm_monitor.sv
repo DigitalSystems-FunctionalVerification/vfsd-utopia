@@ -34,7 +34,12 @@ class Monitor extends uvm_monitor;
 
    `uvm_component_utils(Monitor);
 
+   //--------------------------------------- 
+   // Interface, port, seq_item, and ID
+   //---------------------------------------
    vUtopiaTx Tx;		   // Virtual interface with output of DUT
+   uvm_analysis_port #(NNI_cell) item_collected_port;
+   NNI_cell                      trans_collected;
    int PortID;
 
    extern function new(string name, uvm_component parent);
@@ -49,6 +54,10 @@ endclass : Monitor
 //---------------------------------------------------------------------------
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
+
+   trans_collected = new();
+   item_collected_port = new("item_collected_port", this);
+
 endfunction : new
 
 //--------------------------------------- 
@@ -77,6 +86,9 @@ endtask : run_phase
 // monitor
 //---------------------------------------------------------------------------
 task Monitor::monitor();
+   // forever begin
+   //    item_collected_port.write(trans_collected);
+   // end
    // @(posedge Rx.TopReceive.clk_in);
    // req.print();
    // $display("monitoring");

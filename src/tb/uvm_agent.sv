@@ -80,7 +80,6 @@ function void Agent::build_phase(uvm_phase phase);
 
       driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       driver_Rx.PortID  = this.ID;
-      // driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       uni_sequencer_Rx  = UNI_sequencer::type_id::create("UNI_Sequencer_Rx", this);
       
    end
@@ -96,10 +95,6 @@ function void Agent::connect_phase(uvm_phase phase);
    if(get_is_active() == UVM_ACTIVE) begin
 
       driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);
-
-      // for (int i = 0; i < NumRx; i++) begin
-      //    drivers_Rx[i].seq_item_port.connect(uni_sequencers_Rx[i].seq_item_export);
-      // end
       
    end
    
@@ -113,10 +108,7 @@ endfunction
 //---------------------------------------
 function void Agent::end_of_elaboration();
 
-   // for (int i = 0; i < NumTx; i++) begin
-      driver_Rx.seq_item_port.debug_connected_to();
-      // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
-   // end
+   driver_Rx.seq_item_port.debug_connected_to();
 
 endfunction
 

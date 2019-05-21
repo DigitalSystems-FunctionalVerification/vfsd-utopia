@@ -187,7 +187,10 @@ endfunction
 // Connect phase - connecting monitor and scoreboard port
 //---------------------------------------
 function void Test::connect_phase(uvm_phase phase);
-  // agent.monitor.item_collected_port.connect(scoreboard.item_collected_export);
+  // for (int i = 0; i < NumTx; i++) begin
+    // agents[i].monitor_Tx.item_collected_port.connect(scoreboard.item_collected_export);    
+  // end
+
 endfunction : connect_phase
 
 //---------------------------------------
