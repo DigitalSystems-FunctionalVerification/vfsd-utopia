@@ -25,23 +25,6 @@
 typedef virtual Utopia.TB_Rx vUtopiaRx;
 
 typedef class Driver;
-/////////////////////////////////////////////////////////////////////////////
-// Driver callback class
-// Simple callbacks that are called before and after a cell is transmitted
-// This class has empty tasks, which are used by default
-// A testcase can extend this class to inject new behavior in the driver
-// without having to change any code in the driver
-class Driver_cbs;
-   virtual task pre_tx(input Driver drv,
-		       input UNI_cell c,
-		       inout bit drop);
-   endtask : pre_tx
-
-   virtual task post_tx(input Driver drv,
-		       input UNI_cell c);
-   endtask : post_tx
-endclass : Driver_cbs
-
 
 /////////////////////////////////////////////////////////////////////////////
 class Driver extends uvm_driver #(UNI_cell);
@@ -53,9 +36,8 @@ class Driver extends uvm_driver #(UNI_cell);
  
    extern         function       new(string name, uvm_component parent);
    extern virtual function void  build_phase(uvm_phase phase);
-   extern         task           run();
+   extern         task           run_phase(uvm_phase phase);
    extern virtual task           drive();
-   // extern task send (input UNI_cell c);
 
 endclass : Driver
 
@@ -82,7 +64,7 @@ endfunction: build_phase
 // run(): Run the driver. 
 // Get transaction from sequencer, send into DUT
 //---------------------------------------------------------------------------
-task Driver::run();
+task Driver::run_phase(uvm_phase phase);
 
    forever begin
       seq_item_port.get_next_item(req);
@@ -90,69 +72,14 @@ task Driver::run();
       drive();
       seq_item_port.item_done();
    end
-   
-   // UNI_cell c;
-   // bit drop = 0;
+endtask : run_phase
 
-   // // Initialize ports
-   // Rx.cbr.data  <= 0;
-   // Rx.cbr.soc   <= 0;
-   // Rx.cbr.clav  <= 0;
-
-   // forever begin
-   //    // Read the cell at the front of the mailbox
-   //    gen2drv.peek(c);
-   //    begin: Tx
-	//  // Pre-transmit callbacks
-	//  foreach (cbsq[i]) begin
-	//     cbsq[i].pre_tx(this, c, drop);
-	//     if (drop) disable Tx; 	// Don't transmit this cell
-	//  end
-
-	//  c.display($sformatf("@%0t: Drv%0d: ", $time, PortID));
-	//  send(c);
-	 
-	//  // Post-transmit callbacks
-	//  foreach (cbsq[i])
-	//    cbsq[i].post_tx(this, c);
-   //    end
-
-   //    gen2drv.get(c);     // Remove cell from the mailbox
-   //    ->drv2gen;	  // Tell the generator we are done with this cell
-   // end
-endtask : run
-
+//---------------------------------------------------------------------------
 // drive
+//---------------------------------------------------------------------------
 task Driver::drive();
    // @(posedge Rx.TopReceive.clk_in);
    // req.print();
 endtask
-
-
-//---------------------------------------------------------------------------
-// send(): Send a cell into the DUT
-//---------------------------------------------------------------------------
-// task Driver::send(input UNI_cell c);
-//    ATMCellType Pkt;
-
-//    c.pack(Pkt);
-//    $write("Sending cell: "); foreach (Pkt.Mem[i]) $write("%x ", Pkt.Mem[i]); $display;
-
-//    // Iterate through bytes of cell, deasserting Start Of Cell indicater
-//    @(Rx.cbr);
-//    Rx.cbr.clav <= 1;
-//    for (int i=0; i<=52; i++) begin
-//       // If not enabled, loop
-//       while (Rx.cbr.en === 1'b1) @(Rx.cbr);
-
-//       // Assert Start Of Cell indicater, assert enable, send byte 0 (i==0)
-//       Rx.cbr.soc  <= (i == 0);
-//       Rx.cbr.data <= Pkt.Mem[i];
-//       @(Rx.cbr);
-//     end
-//    Rx.cbr.soc <= 'z;
-//    Rx.cbr.data <= 8'bx;
-//    Rx.cbr.clav <= 0;
-// endtask
 
 `endif // DRIVER__SV

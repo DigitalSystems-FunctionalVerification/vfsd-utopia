@@ -103,10 +103,10 @@ module top;
 
   generate
 
-    // for(genvar i=0; i < `TxPorts; i++)
-    // begin: Tx_gen            
-    //     initial uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Tx_%0d",i), Tx[i]);  
-    // end
+    for(genvar i=0; i < `TxPorts; i++)
+    begin: Tx_gen            
+        initial uvm_config_db#(virtual Utopia)::set(uvm_root::get(),"*",$sformatf("vUtopia_Tx_%0d",i), Tx[i]);  
+    end
 
     for(genvar i=0; i < `RxPorts; i++)
     begin: Rx_gen            

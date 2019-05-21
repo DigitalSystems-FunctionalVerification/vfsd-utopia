@@ -40,14 +40,14 @@ class Agent extends uvm_agent;
    //--------------------------------------- 
    // Active agent's components
    //---------------------------------------
-   Driver   driver_Rx; 
+   Driver         driver_Rx; 
    UNI_sequencer  uni_sequencer_Rx;
    // UNI_sequencer  uni_sequencer_Rx;
 
    //--------------------------------------- 
    // Passive agent's components
    //---------------------------------------
-   // Monitor  monitor_Rx; 
+   Monitor        monitor_Tx; 
   
    extern   function void  build_phase(uvm_phase phase);
    extern   function void  connect_phase(uvm_phase phase);
@@ -72,13 +72,14 @@ function void Agent::build_phase(uvm_phase phase);
    // agent_mon_port = new("agent_mon_port", this);
 
    // passive agents have monitor only
-//  monitor = add_sub_monitor::type_id::create("monitor", this);
+   monitor_Tx = Monitor::type_id::create("Monitor_Tx", this);
+   monitor_Tx.PortID = this.ID;
    
    //creating driver and sequencer only for ACTIVE agent
    if(get_is_active() == UVM_ACTIVE)begin  // monitor active
 
       driver_Rx         = Driver::type_id::create("Driver_Rx", this);
-      driver_Rx.PortID  = ID;
+      driver_Rx.PortID  = this.ID;
       // driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       uni_sequencer_Rx  = UNI_sequencer::type_id::create("UNI_Sequencer_Rx", this);
       
@@ -95,7 +96,6 @@ function void Agent::connect_phase(uvm_phase phase);
    if(get_is_active() == UVM_ACTIVE) begin
 
       driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);
-
 
       // for (int i = 0; i < NumRx; i++) begin
       //    drivers_Rx[i].seq_item_port.connect(uni_sequencers_Rx[i].seq_item_export);
