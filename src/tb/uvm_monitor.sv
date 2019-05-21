@@ -25,46 +25,44 @@ import uvm_pkg::*;
 `include "uvm_macros.svh"
 `include "uvm_atm_cell.sv"
 
-// typedef virtual Utopia.TB_Tx vUtopiaTx;
+typedef virtual Utopia.TB_Tx vUtopiaTx;
 
-// typedef class Monitor;
-// /////////////////////////////////////////////////////////////////////////////
-// // Monitor callback class
-// // Simple callbacks that are called before and after a cell is transmitted
-// // This class has empty tasks, which are used by default
-// // A testcase can extend this class to inject new behavior in the monitor
-// // without having to change any code in the monitor
-// class Monitor_cbs;
-//    virtual task post_rx(input Monitor mon,
-// 		        input NNI_cell c);
-//    endtask : post_rx
-// endclass : Monitor_cbs
-
-
-// /////////////////////////////////////////////////////////////////////////////
-// class Monitor extends uvm_monitor;
-
-//    `uvm_component_utils(Monitor);
-
-//    vUtopiaTx Tx;		   // Virtual interface with output of DUT
-//    Monitor_cbs cbsq[$]; // Queue of callback objects
-//    int PortID;
-
-//    extern function new(input vUtopiaTx Tx, input int PortID, string name, uvm_component parent);
-//    extern function void build_phase(uvm_phase phase);
-//    extern task run();
-//    extern task receive (output NNI_cell c);
-// endclass : Monitor
+typedef class Monitor;
+/////////////////////////////////////////////////////////////////////////////
+// Monitor callback class
+// Simple callbacks that are called before and after a cell is transmitted
+// This class has empty tasks, which are used by default
+// A testcase can extend this class to inject new behavior in the monitor
+// without having to change any code in the monitor
+class Monitor_cbs;
+   virtual task post_rx(input Monitor mon,
+		        input NNI_cell c);
+   endtask : post_rx
+endclass : Monitor_cbs
 
 
-// //---------------------------------------------------------------------------
-// // new(): construct an object
-// //---------------------------------------------------------------------------
-// function Monitor::new(input vUtopiaTx Tx, input int PortID, string name, uvm_component parent);
-//    super.new(name, parent);
-//    this.Tx     = Tx;
-//    this.PortID = PortID;
-// endfunction : new
+/////////////////////////////////////////////////////////////////////////////
+class Monitor extends uvm_monitor;
+
+   `uvm_component_utils(Monitor);
+
+   vUtopiaTx Tx;		   // Virtual interface with output of DUT
+   Monitor_cbs cbsq[$]; // Queue of callback objects
+   int PortID;
+
+   extern function new(string name, uvm_component parent);
+  //  extern function void build_phase(uvm_phase phase);
+  //  extern task run();
+  //  extern task receive (output NNI_cell c);
+endclass : Monitor
+
+
+//---------------------------------------------------------------------------
+// new(): construct an object
+//---------------------------------------------------------------------------
+function Monitor::new(string name, uvm_component parent);
+   super.new(name, parent);
+endfunction : new
 
 // //--------------------------------------- 
 // // Build phase

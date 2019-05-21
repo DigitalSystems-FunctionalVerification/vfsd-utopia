@@ -47,7 +47,7 @@ endclass : Driver_cbs
 class Driver extends uvm_driver #(UNI_cell);
    `uvm_component_utils(Driver);
 
-   vUtopiaRx Tx;  // Virtual interface for transmitting cells
+   vUtopiaRx Rx;  // Virtual interface for transmitting cells
    // vUtopiaRx Rx;  // Virtual interface for transmitting cells
    int PortID;
  
@@ -65,7 +65,6 @@ endclass : Driver
 //---------------------------------------------------------------------------
 function Driver::new(string name, uvm_component parent);   
    super.new(name, parent);
-
 endfunction : new 
 
 //---------------------------------------------------------------------------
@@ -74,8 +73,8 @@ endfunction : new
 //---------------------------------------------------------------------------
 function void Driver::build_phase(uvm_phase phase);
    super.build_phase(phase);
-   if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Tx_%0d", PortID), Tx))
-      `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Tx"});
+   if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", this.PortID), Rx))
+      `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Rx"});
 endfunction: build_phase
  
 
@@ -126,7 +125,7 @@ endtask : run
 // drive
 task Driver::drive();
    // @(posedge Rx.TopReceive.clk_in);
-   req.print();
+   // req.print();
 endtask
 
 

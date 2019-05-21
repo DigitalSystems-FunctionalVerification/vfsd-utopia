@@ -34,21 +34,20 @@ class Agent extends uvm_agent;
   `uvm_component_utils(Agent)
 
   // uvm_analysis_port#(add_sub_seq_item) agent_mon_port;
-  
+
    int ID;
 
    //--------------------------------------- 
    // Active agent's components
    //---------------------------------------
-   Driver         driver_Tx;
-   // Driver         driver_Rx;  
-   UNI_sequencer  uni_sequencer_Tx;
+   Driver   driver_Rx; 
+   UNI_sequencer  uni_sequencer_Rx;
    // UNI_sequencer  uni_sequencer_Rx;
 
    //--------------------------------------- 
    // Passive agent's components
    //---------------------------------------
-   // add_sub_monitor   monitor;
+   // Monitor  monitor_Rx; 
   
    extern   function void  build_phase(uvm_phase phase);
    extern   function void  connect_phase(uvm_phase phase);
@@ -78,10 +77,10 @@ function void Agent::build_phase(uvm_phase phase);
    //creating driver and sequencer only for ACTIVE agent
    if(get_is_active() == UVM_ACTIVE)begin  // monitor active
 
-      driver_Tx         = Driver::type_id::create("Driver_Tx", this);
-      driver_Tx.PortID  = ID;
+      driver_Rx         = Driver::type_id::create("Driver_Rx", this);
+      driver_Rx.PortID  = ID;
       // driver_Rx         = Driver::type_id::create("Driver_Rx", this);
-      uni_sequencer_Tx  = UNI_sequencer::type_id::create("UNI_Sequencer_Tx", this);
+      uni_sequencer_Rx  = UNI_sequencer::type_id::create("UNI_Sequencer_Rx", this);
       
    end
 endfunction
@@ -95,7 +94,7 @@ function void Agent::connect_phase(uvm_phase phase);
    // connect driver monitor to sequencer port
    if(get_is_active() == UVM_ACTIVE) begin
 
-      driver_Tx.seq_item_port.connect(uni_sequencer_Tx.seq_item_export);
+      driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);
 
 
       // for (int i = 0; i < NumRx; i++) begin
@@ -115,7 +114,7 @@ endfunction
 function void Agent::end_of_elaboration();
 
    // for (int i = 0; i < NumTx; i++) begin
-      driver_Tx.seq_item_port.debug_connected_to();
+      driver_Rx.seq_item_port.debug_connected_to();
       // uni_sequencers_Tx[i].seq_item_export.debug_provided_to();
    // end
 

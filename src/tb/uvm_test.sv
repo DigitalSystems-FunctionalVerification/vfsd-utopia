@@ -98,7 +98,7 @@ class Test extends uvm_test;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  Agent agents[NumTx];
+  Agent agents[NumRx];
 
   // //---------------------------------------
   // // drivers instance 
@@ -159,7 +159,7 @@ function void Test::build_phase(uvm_phase phase);
   // atm_cell_test.randomize();
   // Create the sequence
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  for (int i = 0; i < NumTx; i++) begin
+  for (int i = 0; i < NumRx; i++) begin
     agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
     agents[i].ID  = i;  
   end
@@ -195,7 +195,7 @@ endfunction : connect_phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
   //print's the topology
-  // uvm_top.print_topology();
+  uvm_top.print_topology();
   // uvm_factory::get().print();
 endfunction
 
@@ -206,8 +206,8 @@ task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
 
-  for (int i = 0; i < NumTx; i++) begin
-    uni_sequence.start(agents[i].uni_sequencer_Tx);
+  for (int i = 0; i < NumRx; i++) begin
+    uni_sequence.start(agents[i].uni_sequencer_Rx);
   end
 
   phase.drop_objection(this);
@@ -222,7 +222,7 @@ endtask : run_phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
   // uni_sequence.print();
-  uvm_config_db #(int)::dump();
+  // uvm_config_db #(int)::dump();
   // for (int i = 0; i < NumTx; i++) begin
   //   agent.drivers_Tx[i].print();
   // end
