@@ -104,7 +104,7 @@ endfunction
 //---------------------------------------
 function void Agent::end_of_elaboration();
 
-   // driver_Rx.seq_item_port.debug_connected_to();
+   driver_Rx.seq_item_port.debug_connected_to();
    monitor_Tx.item_collected_port.debug_connected_to();
 
 endfunction
