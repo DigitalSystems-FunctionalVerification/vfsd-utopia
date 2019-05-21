@@ -22,13 +22,7 @@
 `define ENVIRONMENT__SV
 
 `include "uvm_agent.sv"
-// `include "uvm_driver.sv"
-// `include "uvm_monitor.sv"
-// `include "config.sv"
 `include "uvm_scoreboard.sv"
-// `include "coverage.sv"
-// `include "cpu_ifc.sv"
-// `include "cpu_driver.sv"
 
 class Environment extends uvm_env;
    `uvm_component_utils(Environment)
@@ -52,13 +46,13 @@ class Environment extends uvm_env;
    function void build_phase(uvm_phase phase);
       super.build_phase(phase);
 
+      scoreboard = Scoreboard::type_id::create("Scoreboard", this);
+      
       for (int i = 0; i < NumRx; i++) begin
          agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
          agents[i].ID  = i;  
       end
-
-      scoreboard = Scoreboard::type_id::create("Scoreboard", this);
-
+      
    endfunction : build_phase
  
 endclass : Environment

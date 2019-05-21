@@ -74,21 +74,6 @@
 
 class Test extends uvm_test;
   `uvm_component_utils(Test)
-
-  //---------------------------------------
-  // environment instance 
-  //---------------------------------------
-  // Environment env;
-  
-  //---------------------------------------
-  // atm_cell instance 
-  //---------------------------------------
-  // UNI_cell atm_cell_test;
-
-  //--------------------------------------- 
-  // Active agent's components
-  //---------------------------------------
-  // UNI_sequencer uni_sequencer;  
   
   //---------------------------------------
   // sequence instance 
@@ -98,18 +83,7 @@ class Test extends uvm_test;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  // Agent agents[NumRx];
-
-  //---------------------------------------
-  // Agent
-  //---------------------------------------   
   Environment environment;
-
-  // //---------------------------------------
-  // // drivers instance 
-  // //---------------------------------------   
-  // Driver drivers_Tx[NumTx];
-  // Driver drivers_Rx[NumRx];  
 
   // logic rst, clk;
 
@@ -135,57 +109,9 @@ endfunction
 //---------------------------------------
 function void Test::build_phase(uvm_phase phase);
   super.build_phase(phase);
-  // #(parameter int NumRx = 4, parameter int NumTx = 4)
-  // (Utopia.TB_Rx Rx[0:NumRx-1],
-  //   Utopia.TB_Tx Tx[0:NumTx-1],
-  //   cpu_ifc.Test mif,
-  //   input logic rst, clk);
-  //   super.build_phase(phase);
 
-  // int NumRx = 4;
-  // int NumTx = 4;
-  // Utopia.TB_Rx Rx[0:NumRx-1];
-  // Utopia.TB_Tx Tx[0:NumTx-1];
-  // cpu_ifc.Test mif;
-  // input logic rst, clk;  
-
-  // Miscellaneous control interfaces
-  // logic Initialized;
-
-  // Create the environment
-  environment = Environment::type_id::create("Environment", this);
-  // env = Environment::type_id::create(Rx, Tx, NumRx, NumTx, mif, "env", this);
-  // env = Environment::type_id::create(null, null, null, null, null, "env", this);
-  // Create the sequence
-  // seq = add_sub_sequence::type_id::create("seq");
-
-  // env = new(Rx, Tx, NumRx, NumTx, mif);
-
-  // atm_cell_test = UNI_cell::type_id::create("atm_cell_test");
-  // atm_cell_test.randomize();
-  // Create the sequence
+  environment   = Environment::type_id::create("Environment", this);
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
-  // for (int i = 0; i < NumRx; i++) begin
-  //   agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
-  //   agents[i].ID  = i;  
-  // end
-  
-
-  $display("Simulation was run with conditional compilation settings of:");
-  $display("`define TxPorts %0d", `TxPorts);
-  $display("`define RxPorts %0d", `RxPorts);
-  `ifdef FWDALL
-    $display("`define FWDALL");
-  `endif
-  `ifdef SYNTHESIS
-    $display("`define SYNTHESIS");
-  `endif
-  $display("");
-
-  // env.gen_cfg();
-  // env.build();
-  // env.run();
-  // env.wrap_up();
 
 endfunction
 
@@ -194,7 +120,7 @@ endfunction
 //---------------------------------------
 function void Test::connect_phase(uvm_phase phase);
   // for (int i = 0; i < NumTx; i++) begin
-    // agents[i].monitor_Tx.item_collected_port.connect(scoreboard.item_collected_export);    
+  //   environment.agents[i].monitor_Tx.item_collected_port.connect(scoreboard.item_collected_export);    
   // end
 
 endfunction : connect_phase
@@ -230,16 +156,8 @@ endtask : run_phase
 // Post main phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
-  // uni_sequence.print();
   // uvm_config_db #(int)::dump();
-  // for (int i = 0; i < NumTx; i++) begin
-  //   agent.drivers_Tx[i].print();
-  // end
-  // for (int i = 0; i < NumRx; i++) begin
-  //   agent.drivers_Rx[i].print();
-  // end
 endtask : post_main_phase;
-
 
 //---------------------------------------
 // report phase

@@ -34,55 +34,14 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
   function new(string name = "UNI_sequence");
     super.new(name);
   endfunction //new()
-
-  // `uvm_declare_p_sequencer(add_sub_sequencer)
   
   //---------------------------------------
   // create, randomize and send the item to driver
   //---------------------------------------
    virtual task body();
-      // int i = 0;
-      // repeat(2) begin
       `uvm_create(req)
       `uvm_rand_send(req)
-         // req = UNI_cell::type_id::create("req");
-         // wait_for_grant();
-         // req.randomize();
-         // req.print();
-         // send_request(req);
-         // wait_for_item_done();
-         // req.print();
-         // i++;
-      // end 
    endtask
-
-   // UNI_cell blueprint;	// Blueprint for generator
-   // mailbox  gen2drv;	// Mailbox to driver for cells
-   // event    drv2gen;	// Event from driver when done with cell
-   // int      nCells;	// Number of cells for this generator to create
-   // int	    PortID;	// Which Rx port are we generating?
-   
-   // function new(input mailbox gen2drv,
-	// 	input event drv2gen,
-	// 	input int nCells,
-	// 	input int PortID);
-   //    this.gen2drv = gen2drv;
-   //    this.drv2gen = drv2gen;
-   //    this.nCells  = nCells;
-   //    this.PortID  = PortID;
-   //    blueprint = new();
-   // endfunction : new
-
-   // task run();
-   //    UNI_cell c;
-   //    repeat (nCells) begin
-	//  assert(blueprint.randomize());
-	//  $cast(c, blueprint.copy());
-	//  c.display($sformatf("@%0t: Gen%0d: ", $time, PortID));
-	//  gen2drv.put(c);
-	//  @drv2gen;		// Wait for driver to finish with it
-   //    end
-   // endtask : run
 
 endclass : UNI_sequence
 
@@ -92,57 +51,21 @@ endclass : UNI_sequence
 class NNI_sequence extends uvm_sequence#(NNI_cell);
 
    `uvm_object_utils(NNI_sequence)
-   
-   //--------------------------------------- 
-   // Constructor
-   //---------------------------------------
-   function new(string name = "NNI_sequence");
-      super.new(name);
-   endfunction //new()
-
-   // `uvm_declare_p_sequencer(add_sub_sequencer)
-   
-   //---------------------------------------
-   // create, randomize and send the item to driver
-   //---------------------------------------
+  
+  //--------------------------------------- 
+  // Constructor
+  //---------------------------------------
+  function new(string name = "NNI_sequence");
+    super.new(name);
+  endfunction //new()
+  
+  //---------------------------------------
+  // create, randomize and send the item to driver
+  //---------------------------------------
    virtual task body();
-      repeat(2) begin
-         req = NNI_cell::type_id::create("req");
-         wait_for_grant();
-         req.randomize();
-         send_request(req);
-         wait_for_item_done();
-      end 
+      `uvm_create(req)
+      `uvm_rand_send(req)
    endtask
-
-//    NNI_cell blueprint;	// Blueprint for generator
-//    mailbox  gen2drv;	// Mailbox to driver for cells
-//    event    drv2gen;	// Event from driver when done with cell
-//    int      nCells;	// Number of cells for this generator to create
-//    int	    PortID;	// Which Rx port are we generating?
-
-//    function new(input mailbox gen2drv,
-// 		input event drv2gen,
-// 		input int nCells,
-// 		input int PortID);
-//       this.gen2drv = gen2drv;
-//       this.drv2gen = drv2gen;
-//       this.nCells  = nCells;
-//       this.PortID  = PortID;
-//       blueprint = new();
-//    endfunction : new
-
-
-//    task run();
-//       NNI_cell c;
-//       repeat (nCells) begin
-// 	 assert(blueprint.randomize());
-// 	 $cast(c, blueprint.copy());
-// 	 c.display($sformatf("Gen%0d: ", PortID));
-// 	 gen2drv.put(c);
-// 	 @drv2gen;		// Wait for driver to finish with it
-//       end
-//    endtask : run
 
 endclass : NNI_sequence
 

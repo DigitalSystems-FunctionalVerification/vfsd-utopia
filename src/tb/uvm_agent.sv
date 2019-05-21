@@ -32,9 +32,7 @@
 class Agent extends uvm_agent;
 
   `uvm_component_utils(Agent)
-
-  // uvm_analysis_port#(add_sub_seq_item) agent_mon_port;
-
+  
    int ID;
 
    //--------------------------------------- 
@@ -42,7 +40,7 @@ class Agent extends uvm_agent;
    //---------------------------------------
    Driver         driver_Rx; 
    UNI_sequencer  uni_sequencer_Rx;
-   // UNI_sequencer  uni_sequencer_Rx;
+   // NNI_sequencer  nni_sequencer_Tx;
 
    //--------------------------------------- 
    // Passive agent's components
@@ -69,8 +67,6 @@ endfunction //new()
 function void Agent::build_phase(uvm_phase phase);
    super.build_phase(phase);
 
-   // agent_mon_port = new("agent_mon_port", this);
-
    // passive agents have monitor only
    monitor_Tx = Monitor::type_id::create("Monitor_Tx", this);
    monitor_Tx.PortID = this.ID;
@@ -93,17 +89,12 @@ function void Agent::connect_phase(uvm_phase phase);
 
    // connect driver monitor to sequencer port
    if(get_is_active() == UVM_ACTIVE) begin
-
-      driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);
-      
+      driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);      
    end
-   
-   // connect monitor port to agent port
-   // monitor.item_collected_port.connect(agent_mon_port);
 
 endfunction
 
-//---------------------------------------  function void Agent::end_of_elaboration(uvm_phase phase);
+//---------------------------------------  
 // End of elaboration phase - debbuging connection
 //---------------------------------------
 function void Agent::end_of_elaboration();
