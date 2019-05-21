@@ -14,6 +14,7 @@ vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_environment.
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/environment.sv 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/coverage.sv
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/scoreboard.sv 
+vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_scoreboard.sv 
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_monitor.sv 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/monitor.sv 
 #vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/generator.sv

@@ -1,5 +1,5 @@
 /**********************************************************************
- * Definition of the environment class for the ATM testbench
+ * Definition of the scoreboard class for the ATM testbench
  *
  * Author: Chris Spear
  * Revision: 1.01
@@ -17,36 +17,34 @@
  * Book copyright: 2008-2011, Springer LLC, USA, Springer.com
  *********************************************************************/
 
+`ifndef SCOREBOARD__SV
+ `define SCOREBOARD__SV
 
-`ifndef ENVIRONMENT__SV
-`define ENVIRONMENT__SV
+`include "config.sv"
+`include "uvm_atm_cell.sv"
 
-`include "uvm_agent.sv"
-// `include "uvm_driver.sv"
-// `include "uvm_monitor.sv"
-// `include "config.sv"
-// `include "scoreboard.sv"
-// `include "coverage.sv"
-// `include "cpu_ifc.sv"
-// `include "cpu_driver.sv"
-
-class Environment extends uvm_env;
+class Scoreboard extends uvm_scoreboard;
  
-//   Agent agent;
-   
-  `uvm_component_utils(Environment)
-     
+  `uvm_component_utils(Scoreboard)
+
+  uvm_analysis_imp#(UNI_cell, Scoreboard) item_collected_export;
+ 
   // new - constructor
-  function new(string name, uvm_component parent);
+  function new (string name, uvm_component parent);
     super.new(name, parent);
   endfunction : new
  
-  // build_phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-   //  agent = Agent::type_id::create("mem_agnt", this);
-  endfunction : build_phase
+    item_collected_export = new("item_collected_export", this);
+  endfunction: build_phase
+   
+  // write
+  virtual function void write(UNI_cell pkt);
+    $display("SCB:: Pkt recived");
+    pkt.print();
+  endfunction : write
  
-endclass : Environment
+endclass : Scoreboard
 
-`endif // ENVIRONMENT__SV
+`endif // SCOREBOARD__SV
