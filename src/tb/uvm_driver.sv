@@ -66,28 +66,53 @@ endfunction: build_phase
 //---------------------------------------------------------------------------
 task Driver::run_phase(uvm_phase phase);
 
+   // Initialize ports
+   Rx.cbr.data  <= 0;
+   Rx.cbr.soc   <= 0;
+   Rx.cbr.clav  <= 0;
+
    forever begin
       seq_item_port.get_next_item(req);
       // respond_to_transfer(req);
       drive();
       seq_item_port.item_done();
    end
+
 endtask : run_phase
 
 //---------------------------------------------------------------------------
 // drive
 //---------------------------------------------------------------------------
 task Driver::drive();
+
+   ATMCellType Pkt;
+   req.pack(Pkt);
+
+   @(Rx.cbr);
+   Rx.cbr.clav <= 1;
+   for (int i=0; i<=52; i++) begin
+      // If not enabled, loop
+      while (Rx.cbr.en === 1'b1) @(Rx.cbr);
+
+      // Assert Start Of Cell indicater, assert enable, send byte 0 (i==0)
+      Rx.cbr.soc  <= (i == 0);
+      Rx.cbr.data <= Pkt.Mem[i];
+      @(Rx.cbr);
+    end
+   Rx.cbr.soc <= 'z;
+   Rx.cbr.data <= 8'bx;
+   Rx.cbr.clav <= 0;
+
    //DEBUG 
    // req.print();
-   @(posedge Rx.cbr.clk_in);
-      Rx.cbr.ATMcell.uni.GFC      <= req.GFC;
-      Rx.cbr.ATMcell.uni.VPI      <= req.VPI;
-      Rx.cbr.ATMcell.uni.VCI      <= req.VCI;
-      Rx.cbr.ATMcell.uni.CLP      <= req.CLP;
-      Rx.cbr.ATMcell.uni.PT       <= req.PT;
-      Rx.cbr.ATMcell.uni.HEC      <= req.HEC;
-      Rx.cbr.ATMcell.uni.Payload  <= req.Payload;
+   // @(posedge Rx.cbr.clk_in);
+   //    Rx.cbr.ATMcell.uni.GFC      <= req.GFC;
+   //    Rx.cbr.ATMcell.uni.VPI      <= req.VPI;
+   //    Rx.cbr.ATMcell.uni.VCI      <= req.VCI;
+   //    Rx.cbr.ATMcell.uni.CLP      <= req.CLP;
+   //    Rx.cbr.ATMcell.uni.PT       <= req.PT;
+   //    Rx.cbr.ATMcell.uni.HEC      <= req.HEC;
+   //    Rx.cbr.ATMcell.uni.Payload  <= req.Payload;
    
 endtask
 

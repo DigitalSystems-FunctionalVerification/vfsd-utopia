@@ -74,6 +74,7 @@ class UNI_cell extends BaseTr;
    extern function NNI_cell to_NNI();
    extern function void generate_syndrome();
    extern function bit [7:0] hec (bit [31:0] hdr);
+   extern virtual function void pack(output ATMCellType to);
 endclass : UNI_cell
 
 //-----------------------------------------------------------------------------
@@ -133,6 +134,17 @@ function bit [7:0] UNI_cell::hec (bit [31:0] hdr);
    end
    hec = hec ^ 8'h55;
 endfunction : hec
+
+function void UNI_cell::pack(output ATMCellType to);
+   to.uni.GFC     = this.GFC;
+   to.uni.VPI     = this.VPI;
+   to.uni.VCI     = this.VCI;
+   to.uni.CLP     = this.CLP;
+   to.uni.PT      = this.PT;
+   to.uni.HEC     = this.HEC;
+   to.uni.Payload = this.Payload;
+   //$write("Packed: "); foreach (to.Mem[i]) $write("%x ", to.Mem[i]); $display;
+endfunction : pack
 
 /////////////////////////////////////////////////////////////////////////////
 // NNI Cell Format

@@ -98,7 +98,7 @@ task Monitor::monitor();
 
       monitor_to_agent_analysis_port.write(trans_collected);
       //DEBUG 
-      // trans_collected.print();
+      trans_collected.print();
 
     end
 endtask

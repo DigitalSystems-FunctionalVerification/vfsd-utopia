@@ -1,6 +1,6 @@
 #add your waves bellow
 #----------------------------------
-
+#do wave.do
 
 #add forces below
 #----------------------------------
