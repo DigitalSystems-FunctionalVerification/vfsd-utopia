@@ -38,7 +38,7 @@ class Monitor extends uvm_monitor;
    // Interface, port, seq_item, and ID
    //---------------------------------------
    vUtopiaTx Tx;		   // Virtual interface with output of DUT
-   uvm_analysis_port #(NNI_cell) item_collected_port;
+   uvm_analysis_port #(NNI_cell) monitor_to_agent_analysis_port;
    NNI_cell                      trans_collected;
    int PortID;
 
@@ -56,7 +56,7 @@ function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
    trans_collected      = new();
-   item_collected_port  = new("item_collected_port", this);
+   monitor_to_agent_analysis_port  = new("monitor_to_agent_analysis_port", this);
 
 endfunction : new
 
@@ -96,7 +96,7 @@ task Monitor::monitor();
          trans_collected.HEC       <= Tx.cbt.ATMcell.uni.HEC;
          trans_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
 
-      item_collected_port.write(trans_collected);
+      monitor_to_agent_analysis_port.write(trans_collected);
       trans_collected.print();
 
     end

@@ -32,6 +32,7 @@
 class Agent extends uvm_agent;
 
   `uvm_component_utils(Agent)
+  uvm_analysis_port #(NNI_cell) agent_to_scb_analysis_port;
   
    int ID;
 
@@ -67,6 +68,9 @@ endfunction //new()
 function void Agent::build_phase(uvm_phase phase);
    super.build_phase(phase);
 
+   // Analysis port connection
+   agent_to_scb_analysis_port = new(.name("agent_to_scb_analysis_port"), .parent(this));
+
    // passive agents have monitor only
    monitor_Tx = Monitor::type_id::create("Monitor_Tx", this);
    monitor_Tx.PortID = this.ID;
@@ -93,7 +97,7 @@ function void Agent::connect_phase(uvm_phase phase);
    end
 
    // connect monitor port to agent port
-   // monitor.item_collected_port.connect(agent_mon_port);
+   monitor_Tx.monitor_to_agent_analysis_port.connect(agent_to_scb_analysis_port);
 
 endfunction  
    
@@ -105,7 +109,7 @@ endfunction
 function void Agent::end_of_elaboration();
 
    driver_Rx.seq_item_port.debug_connected_to();
-   monitor_Tx.item_collected_port.debug_connected_to();
+   monitor_Tx.monitor_to_agent_analysis_port.debug_connected_to();
 
 endfunction
 
