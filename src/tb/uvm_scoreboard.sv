@@ -26,8 +26,11 @@
 class Scoreboard extends uvm_scoreboard;
  
   `uvm_component_utils(Scoreboard)
+  `uvm_analysis_imp_decl(_name)
 
-  uvm_analysis_imp#(NNI_cell, Scoreboard) item_collected_export;
+  uvm_analysis_export#(NNI_cell)          agent_to_scb_analysis_export;
+  uvm_tlm_analysis_fifo#(NNI_cell)        get_data_fifo;
+  // uvm_analysis_imp#(NNI_cell, Scoreboard) item_collected_export; // legacy
  
   // new - constructor
   function new (string name, uvm_component parent);
@@ -36,13 +39,20 @@ class Scoreboard extends uvm_scoreboard;
  
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    item_collected_export = new("item_collected_export", this);
+    // item_collected_export = new("item_collected_export", this);
+    agent_to_scb_analysis_export  = new("agent_to_scb_analysis_export", this);
+    get_data_fifo                 = new("get_data_fifo", this);
   endfunction: build_phase
+
+  function void connect_phase(uvm_phase phase);
+    agent_to_scb_analysis_export.connect(get_data_fifo.analysis_export);
+  endfunction: connect_phase
    
   // write
   virtual function void write(NNI_cell pkt);
-    $display("SCB:: Pkt recived");
-    pkt.print();
+    `uvm_info("WRITE ON SCOREBOARD", "SCB:: Pkt recived", UVM_LOW);
+    //DEBUG 
+    // pkt.print();
   endfunction : write
  
 endclass : Scoreboard

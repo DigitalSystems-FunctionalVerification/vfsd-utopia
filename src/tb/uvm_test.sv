@@ -129,8 +129,8 @@ endfunction : connect_phase
 // end_of_elabaration phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
-  //print's the topology
-  uvm_top.print_topology();
+  //DEBUG print's the topology
+  // uvm_top.print_topology();
   // uvm_factory::get().print();
 endfunction
 
@@ -156,7 +156,8 @@ endtask : run_phase
 // Post main phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
-  uvm_config_db #(int)::dump();
+  //DEBUG 
+  // uvm_config_db #(int)::dump();
 endtask : post_main_phase;
 
 //---------------------------------------

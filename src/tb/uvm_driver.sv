@@ -78,7 +78,8 @@ endtask : run_phase
 // drive
 //---------------------------------------------------------------------------
 task Driver::drive();
-   req.print();
+   //DEBUG 
+   // req.print();
    @(posedge Rx.cbr.clk_in);
       Rx.cbr.ATMcell.uni.GFC      <= req.GFC;
       Rx.cbr.ATMcell.uni.VPI      <= req.VPI;
