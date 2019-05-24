@@ -55,7 +55,7 @@ class Environment extends uvm_env;
          agents_active[i]           = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
          agents_active[i].ID        = i;  
          agents_active[i].is_active = UVM_ACTIVE;
-         `uvm_info("ENV", $sformatf("Created ACTIVE Agent %0d is_active: %0h", i, agents_active[i].is_active), UVM_LOW);
+         `uvm_info("ENV", $sformatf("Created ACTIVE Agent %0d is_active: %0h", i, agents_active[i].is_active), UVM_HIGH);
       end
 
       // Passive Agents creation
@@ -63,7 +63,7 @@ class Environment extends uvm_env;
          agents_passive[i]          = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
          agents_passive[i].ID       = i;  
          agents_passive[i].is_active = UVM_PASSIVE;
-         `uvm_info("ENV", $sformatf("Created PASSIVE Agent %0d, is_active: %0h", i, agents_passive[i].is_active), UVM_LOW);
+         `uvm_info("ENV", $sformatf("Created PASSIVE Agent %0d, is_active: %0h", i, agents_passive[i].is_active), UVM_HIGH);
       end
       
    endfunction : build_phase

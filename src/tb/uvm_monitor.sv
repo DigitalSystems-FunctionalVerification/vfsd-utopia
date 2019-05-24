@@ -63,21 +63,26 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   `uvm_info("MONITOR", "started new", UVM_HIGH);
+   `uvm_info("MONITOR", "started new", UVM_LOW);
    
+   parent.print();
+
+   uvm_config_db #(bit)::get (this,"", "is_active", is_active);
+
    if ( is_active == UVM_ACTIVE ) begin
 
       Rx_analysis_port           = new("Rx_analysis_port", this);
       Rx_transaction_collected   = new();
 
-      `uvm_info("MONITOR", "Rx_analysis_port builded", UVM_LOW);
+      `uvm_info("MONITOR", "Rx_analysis_port builded", UVM_HIGH);
+      `uvm_info("MON", $sformatf("Created Rx_analysis_port ## is_active: %0h", is_active), UVM_HIGH);
       
    end else begin
 
       Tx_analysis_port           = new("Tx_analysis_port", this);
       Tx_transaction_collected   = new();
 
-      `uvm_info("MONITOR", "Tx_analysis_port builded", UVM_LOW);
+      `uvm_info("MONITOR", "Tx_analysis_port builded", UVM_HIGH);
       
    end
 
