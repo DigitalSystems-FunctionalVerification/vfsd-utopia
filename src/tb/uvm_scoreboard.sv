@@ -28,9 +28,11 @@ class Scoreboard extends uvm_scoreboard;
   `uvm_component_utils(Scoreboard)
   `uvm_analysis_imp_decl(_name)
 
-  uvm_analysis_export#(NNI_cell)          agent_to_scb_analysis_export;
-  uvm_tlm_analysis_fifo#(NNI_cell)        get_data_fifo;
-  // uvm_analysis_imp#(NNI_cell, Scoreboard) item_collected_export; // legacy
+  uvm_analysis_port#(UNI_CELL)      dut_input_port;
+  uvm_analysis_port#(NNI_cell)      dut_output_port;
+  
+  uvm_tlm_analysis_fifo#(UNI_CELL)  dut_input_fifo;
+  uvm_tlm_analysis_fifo#(NNI_cell)  dut_output_fifo;
  
   // new - constructor
   function new (string name, uvm_component parent);
@@ -41,11 +43,11 @@ class Scoreboard extends uvm_scoreboard;
     super.build_phase(phase);
     // item_collected_export = new("item_collected_export", this);
     agent_to_scb_analysis_export  = new("agent_to_scb_analysis_export", this);
-    get_data_fifo                 = new("get_data_fifo", this);
+    dut_output_fifo               = new("dut_output_fifo", this);
   endfunction: build_phase
 
   function void connect_phase(uvm_phase phase);
-    agent_to_scb_analysis_export.connect(get_data_fifo.analysis_export);
+    agent_to_scb_analysis_export.connect(dut_output_fifo.analysis_export);
   endfunction: connect_phase
    
   // write

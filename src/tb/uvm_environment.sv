@@ -30,7 +30,8 @@ class Environment extends uvm_env;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  Agent agents[NumRx];
+  Agent agents_active   [RxPorts];
+  Agent agents_passive  [TxPorts];  
 
   //---------------------------------------
   // Scoreboard
@@ -42,23 +43,40 @@ class Environment extends uvm_env;
     super.new(name, parent);
   endfunction : new
  
-  // build_phase
+  // Build phase
    function void build_phase(uvm_phase phase);
       super.build_phase(phase);
 
+      // Scoreboard creation
       scoreboard = Scoreboard::type_id::create("Scoreboard", this);
       
-      for (int i = 0; i < NumRx; i++) begin
-         agents[i]     = Agent::type_id::create($sformatf("Agent_%0d", i), this);  
-         agents[i].ID  = i;  
+      // Active Agents creation
+      for (int i = 0; i < RxPorts; i++) begin
+         agents_active[i]     = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
+         agents_active[i].ID  = i;  
+         agents_active[i].is_active = UVM_PASSIVE;
+      end
+
+      // Passive Agents creation
+      for (int i = 0; i < TxPorts; i++) begin
+         agents_passive[i]     = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
+         agents_passive[i].ID  = i;  
+         agents_active[i].is_active = UVM_ACTIVE;
       end
       
    endfunction : build_phase
 
+   // Connect phase
    virtual function void connect_phase (uvm_phase phase);
       super.connect_phase (phase);
-      for (int i = 0; i < NumRx; i++) begin
-         agents[i].agent_to_scb_analysis_port.connect(scoreboard.agent_to_scb_analysis_export);
+
+      // Connecting passive agents port in scoreboard
+      for (int i = 0; i < RxPorts; i++) begin
+         agents_active[i].analysis_port.connect(scoreboard.dut_input_port);
+      end
+
+      for (int i = 0; i < TxPorts; i++) begin
+         agents_passive[i].analysis_port.connect(scoreboard.dut_output_port);
       end
     
   endfunction

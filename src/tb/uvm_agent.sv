@@ -31,23 +31,23 @@
 //-------------------------------------------------------------------------
 class Agent extends uvm_agent;
 
-  `uvm_component_utils(Agent)
-  uvm_analysis_port #(NNI_cell) agent_to_scb_analysis_port;
+   `uvm_component_utils(Agent)
+   uvm_analysis_port #(BaseTr) analysis_port;
   
    int ID;
 
    //--------------------------------------- 
    // Active agent's components
    //---------------------------------------
-   Driver         driver_Rx; 
+   virtual Driver driver_Rx; 
    UNI_sequencer  uni_sequencer_Rx;
    // NNI_sequencer  nni_sequencer_Tx;
 
    //--------------------------------------- 
    // Passive agent's components
    //---------------------------------------
-   Monitor        monitor_Tx; 
-  
+   Monitor        monitor; 
+
    extern   function void  build_phase(uvm_phase phase);
    extern   function void  connect_phase(uvm_phase phase);
    extern   function void  end_of_elaboration();
@@ -69,20 +69,24 @@ function void Agent::build_phase(uvm_phase phase);
    super.build_phase(phase);
 
    // Analysis port connection
-   agent_to_scb_analysis_port = new(.name("agent_to_scb_analysis_port"), .parent(this));
+   analysis_port = new(.name("analysis_port"), .parent(this));   
 
-   // passive agents have monitor only
-   monitor_Tx = Monitor::type_id::create("Monitor_Tx", this);
-   monitor_Tx.PortID = this.ID;
-   
-   //creating driver and sequencer only for ACTIVE agent
-   if(get_is_active() == UVM_ACTIVE)begin  // monitor active
+   if ( get_is_active() == UVM_ACTIVE ) begin
+
+      monitor = Monitor::type_id::create("monitor_rx", this);
+      monitor.PortID    = this.ID;
 
       driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       driver_Rx.PortID  = this.ID;
       uni_sequencer_Rx  = UNI_sequencer::type_id::create("UNI_Sequencer_Rx", this);
       
+   end else begin
+   
+      monitor = Monitor::type_id::create("monitor_tx", this);
+      monitor.PortID    = this.ID;
+      
    end
+
 endfunction
 
 //---------------------------------------  
@@ -97,7 +101,7 @@ function void Agent::connect_phase(uvm_phase phase);
    end
 
    // connect monitor port to agent port
-   monitor_Tx.monitor_to_agent_analysis_port.connect(agent_to_scb_analysis_port);
+   monitor.monitor_to_agent_analysis_port.connect(analysis_port);
 
 endfunction
 
@@ -109,7 +113,7 @@ function void Agent::end_of_elaboration();
 
    //DEBUG 
    // driver_Rx.seq_item_port.debug_connected_to();
-   // monitor_Tx.monitor_to_agent_analysis_port.debug_connected_to();
+   // monitor.monitor_to_agent_analysis_port.debug_connected_to();
 
 endfunction
 

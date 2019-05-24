@@ -179,6 +179,8 @@ class NNI_cell extends BaseTr;
    extern function void post_randomize();
    extern function void generate_syndrome();
    extern function bit [7:0] hec (bit [31:0] hdr);
+   extern function void unpack(input ATMCellType from);
+   
 endclass : NNI_cell
 
 //-----------------------------------------------------------------------------
@@ -222,6 +224,15 @@ function bit [7:0] NNI_cell::hec (bit [31:0] hdr);
    end
    hec = hec ^ 8'h55;
 endfunction : hec
+
+function void NNI_cell::unpack(input ATMCellType from);
+   this.VPI     = from.nni.VPI;
+   this.VCI     = from.nni.VCI;
+   this.CLP     = from.nni.CLP;
+   this.PT      = from.nni.PT;
+   this.HEC     = from.nni.HEC;
+   this.Payload = from.nni.Payload;
+endfunction : unpack
 
 
 `endif // ATM_CELL__SV
