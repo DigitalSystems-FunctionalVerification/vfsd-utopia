@@ -25,8 +25,6 @@ import uvm_pkg::*;
 `include "uvm_macros.svh"
 `include "uvm_atm_cell.sv"
 
-typedef virtual Utopia.TB_Tx vUtopiaTx;
-
 typedef class Monitor;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -37,11 +35,18 @@ class Monitor extends uvm_monitor;
    //--------------------------------------- 
    // Interface, port, seq_item, and ID
    //---------------------------------------
-   vUtopiaRx                     Rx;		         // Virtual interface with input of DUT
-   vUtopiaTx                     Tx;		         // Virtual interface with output of DUT
-   uvm_analysis_port #(BaseTr)   analysis_port;    // Monitor to agent
-   BaseTr                        transaction_collected;  // Collected data from DUT
+   virtual Utopia                utopia_if;
+
+   uvm_analysis_port #(UNI_cell) Rx_analysis_port;          // Monitor to agent
+   uvm_analysis_port #(NNI_cell) Tx_analysis_port;          // Monitor to agent
+
+   UNI_cell                      Rx_transaction_collected;  // Collected Rx data from DUT
+   NNI_cell                      Tx_transaction_collected;  // Collected Tx data from DUT
+
+   // uvm_analysis_port #(BaseTr) analysis_port;                  // Monitor to agent
+   // BaseTr                      transaction_collected;          // Collected data from Utopia
    int PortID;
+   uvm_active_passive_enum       is_active;
 
    extern function new(string name, uvm_component parent);
    extern function void build_phase(uvm_phase phase);
@@ -58,8 +63,25 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   transaction_collected   = new();
-   analysis_port           = new("analysis_port", this);
+   `uvm_info("MONITOR", "started new", UVM_HIGH);
+   
+   if ( is_active == UVM_ACTIVE ) begin
+
+      Rx_analysis_port           = new("Rx_analysis_port", this);
+      Rx_transaction_collected   = new();
+
+      `uvm_info("MONITOR", "Rx_analysis_port builded", UVM_LOW);
+      
+   end else begin
+
+      Tx_analysis_port           = new("Tx_analysis_port", this);
+      Tx_transaction_collected   = new();
+
+      `uvm_info("MONITOR", "Tx_analysis_port builded", UVM_LOW);
+      
+   end
+
+   `uvm_info("MONITOR", "finished new", UVM_HIGH);
 
 endfunction : new
 
@@ -69,15 +91,15 @@ endfunction : new
 function void Monitor::build_phase(uvm_phase phase);
    super.build_phase(phase);
 
-   if ( get_is_active() == UVM_ACTIVE ) begin
+   if ( is_active == UVM_ACTIVE ) begin
 
-      if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", this.PortID), Rx))
-      `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".Rx"});
+      if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", this.PortID), utopia_if))
+      `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".utopia_if"});
       
    end else begin // passive agent
 
-      if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Tx_%0d", this.PortID), Tx))
-      `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".Tx"});
+      if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Tx_%0d", this.PortID), utopia_if))
+      `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".utopia_if"});
       
    end   
 
@@ -90,7 +112,7 @@ endfunction : build_phase
 task Monitor::run_phase(uvm_phase phase);
    super.run_phase(phase);
 
-   if ( get_is_active() == UVM_ACTIVE ) begin   // Active agent
+   if ( is_active == UVM_ACTIVE ) begin   // Active agent
       
       this.monitoring_active();
 
@@ -99,8 +121,6 @@ task Monitor::run_phase(uvm_phase phase);
       this.monitoring_passive();
       
    end
-   monitor();
-   
 
 endtask : run_phase
 
@@ -109,24 +129,24 @@ endtask : run_phase
 //---------------------------------------------------------------------------
 task Monitor::monitoring_passive();
 
-   ATMCellType Pkt;
+   // ATMCellType Pkt;
 
-   Tx.cbt.clav <= 1;   
+   // Tx.cbt.clav <= 1;   
 
-   forever begin
+   // forever begin
 
-      while (Tx.cbt.soc !== 1'b1 && Tx.cbt.en !== 1'b0)
-      @(Tx.cbt);
-      for (int i=0; i<=52; i++) begin
-         // If not enabled, loop
-         while (Tx.cbt.en !== 1'b0) @(Tx.cbt);
+   //    while (Tx.cbt.soc !== 1'b1 && Tx.cbt.en !== 1'b0)
+   //    @(Tx.cbt);
+   //    for (int i=0; i<=52; i++) begin
+   //       // If not enabled, loop
+   //       while (Tx.cbt.en !== 1'b0) @(Tx.cbt);
          
-         Pkt.Mem[i] = Tx.cbt.data;
-         @(Tx.cbt);
-      end
+   //       Pkt.Mem[i] = Tx.cbt.data;
+   //       @(Tx.cbt);
+   //    end
 
-      Tx.cbt.clav <= 0;
-      transaction_collected.unpack(Pkt);
+   //    Tx.cbt.clav <= 0;
+      // transaction_collected.unpack(Pkt);
 
       // @(posedge Tx.cbt.clk_out);
       //    transaction_collected.VPI       <= Tx.cbt.ATMcell.uni.VPI;
@@ -136,11 +156,11 @@ task Monitor::monitoring_passive();
       //    transaction_collected.HEC       <= Tx.cbt.ATMcell.uni.HEC;
       //    transaction_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
 
-      analysis_port.write(transaction_collected);
+      // analysis_port.write(transaction_collected);
       //DEBUG 
-      transaction_collected.print();
+      // transaction_collected.print();
 
-    end
+   //  end
 
 endtask
 

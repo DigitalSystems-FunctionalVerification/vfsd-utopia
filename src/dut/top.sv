@@ -95,8 +95,8 @@ module top;
   Utopia Tx[0:NumTx-1] ();	// NumTx x Level 1 Utopia Tx Interface
   cpu_ifc mif();	  // Intel-style Utopia parallel management interface
 
-  Utopia vUtopia_Rx ();
-  Utopia vUtopia_Tx ();
+  // Utopia vUtopia_Rx ();
+  // Utopia vUtopia_Tx ();
 
   squat #(NumRx, NumTx) squat(Rx, Tx, mif, rst, clk);	// DUT
   // test  #(NumRx, NumTx) t1(Rx, Tx, mif, rst, clk);	// Test

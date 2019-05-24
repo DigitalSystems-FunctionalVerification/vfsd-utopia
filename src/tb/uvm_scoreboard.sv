@@ -28,10 +28,10 @@ class Scoreboard extends uvm_scoreboard;
   `uvm_component_utils(Scoreboard)
   `uvm_analysis_imp_decl(_name)
 
-  uvm_analysis_port#(UNI_CELL)      dut_input_port;
+  uvm_analysis_port#(UNI_cell)      dut_input_port;
   uvm_analysis_port#(NNI_cell)      dut_output_port;
   
-  uvm_tlm_analysis_fifo#(UNI_CELL)  dut_input_fifo;
+  uvm_tlm_analysis_fifo#(UNI_cell)  dut_input_fifo;
   uvm_tlm_analysis_fifo#(NNI_cell)  dut_output_fifo;
  
   // new - constructor
@@ -41,13 +41,17 @@ class Scoreboard extends uvm_scoreboard;
  
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    // item_collected_export = new("item_collected_export", this);
-    agent_to_scb_analysis_export  = new("agent_to_scb_analysis_export", this);
-    dut_output_fifo               = new("dut_output_fifo", this);
+
+    dut_input_port  = new("dut_input_port",   this);
+    dut_output_port = new("dut_output_port",  this);
+    dut_input_fifo  = new("dut_input_fifo",   this);
+    dut_output_fifo = new("dut_output_fifo",  this);    
+
   endfunction: build_phase
 
   function void connect_phase(uvm_phase phase);
-    agent_to_scb_analysis_export.connect(dut_output_fifo.analysis_export);
+    dut_input_port.connect(dut_input_fifo.analysis_export);
+    dut_input_port.connect(dut_input_fifo.analysis_export);
   endfunction: connect_phase
    
   // write

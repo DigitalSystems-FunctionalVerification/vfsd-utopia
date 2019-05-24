@@ -30,8 +30,8 @@ class Environment extends uvm_env;
   //---------------------------------------
   // Agent
   //---------------------------------------   
-  Agent agents_active   [RxPorts];
-  Agent agents_passive  [TxPorts];  
+  Agent agents_active   [`RxPorts];
+  Agent agents_passive  [`TxPorts];  
 
   //---------------------------------------
   // Scoreboard
@@ -51,17 +51,19 @@ class Environment extends uvm_env;
       scoreboard = Scoreboard::type_id::create("Scoreboard", this);
       
       // Active Agents creation
-      for (int i = 0; i < RxPorts; i++) begin
-         agents_active[i]     = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
-         agents_active[i].ID  = i;  
-         agents_active[i].is_active = UVM_PASSIVE;
+      for (int i = 0; i < `RxPorts; i++) begin
+         agents_active[i]           = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
+         agents_active[i].ID        = i;  
+         agents_active[i].is_active = UVM_ACTIVE;
+         `uvm_info("ENV", $sformatf("Created ACTIVE Agent %0d is_active: %0h", i, agents_active[i].is_active), UVM_LOW);
       end
 
       // Passive Agents creation
-      for (int i = 0; i < TxPorts; i++) begin
-         agents_passive[i]     = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
-         agents_passive[i].ID  = i;  
-         agents_active[i].is_active = UVM_ACTIVE;
+      for (int i = 0; i < `TxPorts; i++) begin
+         agents_passive[i]          = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
+         agents_passive[i].ID       = i;  
+         agents_passive[i].is_active = UVM_PASSIVE;
+         `uvm_info("ENV", $sformatf("Created PASSIVE Agent %0d, is_active: %0h", i, agents_passive[i].is_active), UVM_LOW);
       end
       
    endfunction : build_phase
@@ -71,12 +73,12 @@ class Environment extends uvm_env;
       super.connect_phase (phase);
 
       // Connecting passive agents port in scoreboard
-      for (int i = 0; i < RxPorts; i++) begin
-         agents_active[i].analysis_port.connect(scoreboard.dut_input_port);
+      for (int i = 0; i < `RxPorts; i++) begin
+         agents_active[i].Rx_analysis_port.connect(scoreboard.dut_input_port);
       end
 
-      for (int i = 0; i < TxPorts; i++) begin
-         agents_passive[i].analysis_port.connect(scoreboard.dut_output_port);
+      for (int i = 0; i < `TxPorts; i++) begin
+         agents_passive[i].Tx_analysis_port.connect(scoreboard.dut_output_port);
       end
     
   endfunction

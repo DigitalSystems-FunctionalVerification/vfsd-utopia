@@ -130,7 +130,7 @@ endfunction : connect_phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
   //DEBUG print's the topology
-  // uvm_top.print_topology();
+  uvm_top.print_topology();
   // uvm_factory::get().print();
 endfunction
 
@@ -142,7 +142,7 @@ task Test::run_phase(uvm_phase phase);
   phase.raise_objection(this);
 
   for (int i = 0; i < NumRx; i++) begin
-    uni_sequence.start(environment.agents[i].uni_sequencer_Rx);
+    uni_sequence.start(environment.agents_active[i].uni_sequencer_Rx);
   end
 
   phase.drop_objection(this);

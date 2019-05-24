@@ -23,6 +23,7 @@
 
 `include "uvm_atm_cell.sv"
 
+typedef virtual Utopia.TB_Rx vUtopiaRx;
 typedef virtual Utopia.TB_Tx vUtopiaTx;
 
 typedef class Monitor;
