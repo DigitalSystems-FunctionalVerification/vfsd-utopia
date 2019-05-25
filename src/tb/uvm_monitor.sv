@@ -64,12 +64,14 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   `uvm_info("MONITOR", "started new", UVM_LOW);
+   `uvm_info("MONITOR", "started new", UVM_HIGH);
    
    // parent.print();
 
    // uvm_config_db #(bit)::get (this,"", "is_active", is_active);
 
+   `uvm_info("MON", $sformatf("is_active: %0h", is_active), UVM_LOW);
+   `uvm_info("MON", $sformatf("parent.is_active: %0h", parent.ID), UVM_LOW);
    if ( is_active == UVM_ACTIVE ) begin
 
       Rx_analysis_port           = new("Rx_analysis_port", this);
@@ -87,7 +89,7 @@ function Monitor::new(string name, uvm_component parent);
       
    end
 
-   `uvm_info("MONITOR", "finished new", UVM_LOW);
+   `uvm_info("MONITOR", "finished new", UVM_HIGH);
 
 endfunction : new
 

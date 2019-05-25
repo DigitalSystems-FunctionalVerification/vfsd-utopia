@@ -114,9 +114,11 @@ function void Agent::connect_phase(uvm_phase phase);
    if ( get_is_active() == UVM_ACTIVE ) begin
 
       driver_Rx.seq_item_port.connect(uni_sequencer_Rx.seq_item_export);
-      `uvm_info("AGENT", "driver connected to sequencer", UVM_HIGH);
+      `uvm_info("AGENT", "driver connected to sequencer", UVM_LOW);
+      monitor.print();
+      this.print();
       monitor.Rx_analysis_port.connect(Rx_analysis_port);
-      `uvm_info("AGENT", "monitor analysis port connected to agent analysis port", UVM_HIGH);
+      `uvm_info("AGENT", "monitor analysis port connected to agent analysis port", UVM_LOW);
       
    end else begin
 
