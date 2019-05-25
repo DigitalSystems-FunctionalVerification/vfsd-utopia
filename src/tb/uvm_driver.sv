@@ -51,18 +51,17 @@ endfunction : new
 
 //---------------------------------------------------------------------------
 // build(): Create the driver. 
-// Get interface for interaction with DUT
+// Get interface to interact with DUT
 //---------------------------------------------------------------------------
 function void Driver::build_phase(uvm_phase phase);
    super.build_phase(phase);
    if(!uvm_config_db#(virtual Utopia)::get(this, "", $sformatf("vUtopia_Rx_%0d", this.PortID), Rx))
       `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".Rx"});
-endfunction: build_phase
- 
+endfunction: build_phase 
 
 //---------------------------------------------------------------------------
 // run(): Run the driver. 
-// Get transaction from sequencer, send into DUT
+// Get transaction from sequencer and send it to DUT
 //---------------------------------------------------------------------------
 task Driver::run_phase(uvm_phase phase);
 
@@ -103,17 +102,6 @@ task Driver::drive();
    Rx.cbr.data <= 8'bx;
    Rx.cbr.clav <= 0;
 
-   //DEBUG 
-   // req.print();
-   // @(posedge Rx.cbr.clk_in);
-   //    Rx.cbr.ATMcell.uni.GFC      <= req.GFC;
-   //    Rx.cbr.ATMcell.uni.VPI      <= req.VPI;
-   //    Rx.cbr.ATMcell.uni.VCI      <= req.VCI;
-   //    Rx.cbr.ATMcell.uni.CLP      <= req.CLP;
-   //    Rx.cbr.ATMcell.uni.PT       <= req.PT;
-   //    Rx.cbr.ATMcell.uni.HEC      <= req.HEC;
-   //    Rx.cbr.ATMcell.uni.Payload  <= req.Payload;
-   
 endtask
 
 `endif // DRIVER__SV

@@ -43,9 +43,8 @@ class Monitor extends uvm_monitor;
    UNI_cell                      Rx_transaction_collected;  // Collected Rx data from DUT
    NNI_cell                      Tx_transaction_collected;  // Collected Tx data from DUT
 
-   // uvm_analysis_port #(BaseTr) analysis_port;                  // Monitor to agent
-   // BaseTr                      transaction_collected;          // Collected data from Utopia
    int PortID;
+   
    // Using uvm defined type (https://www.chipverify.com/blog/how-to-turn-an-agent-from-active-to-passive)
    uvm_active_passive_enum       is_active;
 
@@ -96,7 +95,7 @@ function void Monitor::build_phase(uvm_phase phase);
       `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".utopia_if"});
       
    end   
-   
+
 endfunction : build_phase
 
 
@@ -107,10 +106,10 @@ task Monitor::run_phase(uvm_phase phase);
    super.run_phase(phase);
 
    if ( is_active == UVM_ACTIVE ) begin   // Active agent
-      
+
       this.monitoring_active();
 
-   end else begin                               // Passive agent
+   end else begin                         // Passive agent
 
       this.monitoring_passive();
       
@@ -123,38 +122,20 @@ endtask : run_phase
 //---------------------------------------------------------------------------
 task Monitor::monitoring_passive();
 
-   // ATMCellType Pkt;
+   ATMCellType Pkt;
 
-   // Tx.cbt.clav <= 1;   
+   utopia_if.cbt.clav <= 1;
+   while (utopia_if.cbt.soc !== 1'b1 && utopia_if.cbt.en !== 1'b0)
+     @(utopia_if.cbt);
+   for (int i=0; i<=52; i++) begin
+      // If not enabled, loop
+      while (utopia_if.cbt.en !== 1'b0) @(utopia_if.cbt);
+      
+      Pkt.Mem[i] = utopia_if.cbt.data;
+      @(utopia_if.cbt);
+   end
 
-   // forever begin
-
-   //    while (Tx.cbt.soc !== 1'b1 && Tx.cbt.en !== 1'b0)
-   //    @(Tx.cbt);
-   //    for (int i=0; i<=52; i++) begin
-   //       // If not enabled, loop
-   //       while (Tx.cbt.en !== 1'b0) @(Tx.cbt);
-         
-   //       Pkt.Mem[i] = Tx.cbt.data;
-   //       @(Tx.cbt);
-   //    end
-
-   //    Tx.cbt.clav <= 0;
-      // transaction_collected.unpack(Pkt);
-
-      // @(posedge Tx.cbt.clk_out);
-      //    transaction_collected.VPI       <= Tx.cbt.ATMcell.uni.VPI;
-      //    transaction_collected.VCI       <= Tx.cbt.ATMcell.uni.VCI;
-      //    transaction_collected.CLP       <= Tx.cbt.ATMcell.uni.CLP;
-      //    transaction_collected.PT        <= Tx.cbt.ATMcell.uni.PT;
-      //    transaction_collected.HEC       <= Tx.cbt.ATMcell.uni.HEC;
-      //    transaction_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
-
-      // analysis_port.write(transaction_collected);
-      //DEBUG 
-      // transaction_collected.print();
-
-   //  end
+   utopia_if.cbt.clav <= 0;
 
 endtask
 
