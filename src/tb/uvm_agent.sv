@@ -42,7 +42,6 @@ class Agent extends uvm_agent;
    //---------------------------------------
    Driver         driver_Rx; 
    UNI_sequencer  uni_sequencer_Rx;
-   // NNI_sequencer  nni_sequencer_Tx;
 
    //--------------------------------------- 
    // Passive agent's components

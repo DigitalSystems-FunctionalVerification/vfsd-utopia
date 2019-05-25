@@ -36,18 +36,4 @@ class UNI_sequencer extends uvm_sequencer#(UNI_cell);
 
 endclass : UNI_sequencer
 
-
-/////////////////////////////////////////////////////////////////////////////
-class NNI_sequencer extends uvm_sequencer#(NNI_cell);
-   `uvm_sequencer_utils(NNI_sequencer)
-
-   //--------------------------------------- 
-   // Constructor
-   //---------------------------------------
-   function new (string name, uvm_component parent);
-      super.new(name, parent);
-   endfunction : new
-
-endclass : NNI_sequencer
-
 `endif // GENERATOR__SV

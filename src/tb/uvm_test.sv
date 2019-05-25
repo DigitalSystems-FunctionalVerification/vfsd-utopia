@@ -130,7 +130,7 @@ endfunction : connect_phase
 //---------------------------------------  
 function void Test::end_of_elaboration();
   //DEBUG print's the topology
-  uvm_top.print_topology();
+  // uvm_top.print_topology();
   // uvm_factory::get().print();
 endfunction
 

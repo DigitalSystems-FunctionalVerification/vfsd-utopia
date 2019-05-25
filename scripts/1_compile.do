@@ -20,7 +20,7 @@ vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/dut/squat.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/tb/uvm_test.sv
 vlog -work work -sv +incdir+./src/tb +incdir+./src/dut ./src/dut/top.sv 
 
-vsim work.top -novopt +UVM_NO_RELNOTES +UVM_VERBOSITY=UVM_LOW
+vsim work.top -novopt +UVM_NO_RELNOTES +UVM_VERBOSITY=UVM_MEDIUM
 #vsim work.top -novopt +UVM_PHASE_TRACE +UVM_NO_RELNOTES +UVM_VERBOSITY=UVM_LOW
 #vsim work.top -novopt +UVM_PHASE_TRACE +UVM_NO_RELNOTES +UVM_VERBOSITY=UVM_LOW +UVM_CONFIG_DB_TRACE
 set NoQuitOnFinish 1

@@ -46,28 +46,4 @@ class UNI_sequence extends uvm_sequence#(UNI_cell);
 
 endclass : UNI_sequence
 
-
-
-/////////////////////////////////////////////////////////////////////////////
-class NNI_sequence extends uvm_sequence#(NNI_cell);
-
-   `uvm_object_utils(NNI_sequence)
-  
-  //--------------------------------------- 
-  // Constructor
-  //---------------------------------------
-  function new(string name = "NNI_sequence");
-    super.new(name);
-  endfunction //new()
-  
-  //---------------------------------------
-  // create, randomize and send the item to driver
-  //---------------------------------------
-   virtual task body();
-      `uvm_create(req)
-      `uvm_rand_send(req)
-   endtask
-
-endclass : NNI_sequence
-
 `endif // SEQUENCE__SV
