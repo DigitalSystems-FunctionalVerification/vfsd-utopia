@@ -61,8 +61,8 @@ endclass //Agent extends uvm_agent
 //---------------------------------------  
 function Agent::new(string name, uvm_component parent);
    super.new(name, parent);
-   `uvm_info("AGENT", "started new",   UVM_LOW);
-   `uvm_info("AGENT", "finished new",  UVM_LOW);
+   `uvm_info("AGENT", "started new",   UVM_HIGH);
+   `uvm_info("AGENT", "finished new",  UVM_HIGH);
 endfunction //new()
 
 //--------------------------------------- 
@@ -71,14 +71,14 @@ endfunction //new()
 function void Agent::build_phase(uvm_phase phase);
    super.build_phase(phase);
 
-   `uvm_info("AGENT", "started build phase", UVM_MEDIUM);
+   `uvm_info("AGENT", $sformatf("started build phase, is_active: %0h", is_active), UVM_LOW);
 
    if ( get_is_active() == UVM_ACTIVE ) begin
 
       monitor           = Monitor::type_id::create("monitor_rx", this);
       monitor.PortID    = this.ID;
-      // monitor.is_active = UVM_ACTIVE;
-      uvm_config_db #(bit)::set (this,"monitor_rx", "is_active", 1);
+      monitor.is_active = UVM_ACTIVE;
+      // uvm_config_db #(bit)::set (this,"monitor_rx", "is_active", 1);
 
       driver_Rx         = Driver::type_id::create("Driver_Rx", this);
       driver_Rx.PortID  = this.ID;
@@ -92,14 +92,14 @@ function void Agent::build_phase(uvm_phase phase);
    
       monitor           = Monitor::type_id::create("monitor_tx", this);
       monitor.PortID    = this.ID;
-      // monitor.is_active = UVM_PASSIVE;
-      uvm_config_db #(bit)::set (this,"monitor_tx", "is_active", 0);
+      monitor.is_active = UVM_PASSIVE;
+      // uvm_config_db #(bit)::set (this,"monitor_tx", "is_active", 0);
 
       Tx_analysis_port = new(.name("Tx_analysis_port"), .parent(this));   
       
    end
 
-   `uvm_info("AGENT", "finished build phase", UVM_HIGH);
+   `uvm_info("AGENT", "finished build phase", UVM_LOW);
 
 endfunction
 

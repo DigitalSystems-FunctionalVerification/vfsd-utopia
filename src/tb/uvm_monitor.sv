@@ -46,6 +46,7 @@ class Monitor extends uvm_monitor;
    // uvm_analysis_port #(BaseTr) analysis_port;                  // Monitor to agent
    // BaseTr                      transaction_collected;          // Collected data from Utopia
    int PortID;
+   // Using uvm defined type (https://www.chipverify.com/blog/how-to-turn-an-agent-from-active-to-passive)
    uvm_active_passive_enum       is_active;
 
    extern function new(string name, uvm_component parent);
@@ -65,9 +66,9 @@ function Monitor::new(string name, uvm_component parent);
 
    `uvm_info("MONITOR", "started new", UVM_LOW);
    
-   parent.print();
+   // parent.print();
 
-   uvm_config_db #(bit)::get (this,"", "is_active", is_active);
+   // uvm_config_db #(bit)::get (this,"", "is_active", is_active);
 
    if ( is_active == UVM_ACTIVE ) begin
 
@@ -86,7 +87,7 @@ function Monitor::new(string name, uvm_component parent);
       
    end
 
-   `uvm_info("MONITOR", "finished new", UVM_HIGH);
+   `uvm_info("MONITOR", "finished new", UVM_LOW);
 
 endfunction : new
 
@@ -95,6 +96,8 @@ endfunction : new
 //---------------------------------------
 function void Monitor::build_phase(uvm_phase phase);
    super.build_phase(phase);
+
+   `uvm_info("MONITOR", $sformatf("started build phase, is_active: %0h", is_active), UVM_LOW);
 
    if ( is_active == UVM_ACTIVE ) begin
 
@@ -107,6 +110,8 @@ function void Monitor::build_phase(uvm_phase phase);
       `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".utopia_if"});
       
    end   
+
+   `uvm_info("MONITOR", "finished build phase", UVM_LOW);
 
 endfunction : build_phase
 
