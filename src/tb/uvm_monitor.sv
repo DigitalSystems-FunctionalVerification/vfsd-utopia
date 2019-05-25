@@ -64,32 +64,18 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   `uvm_info("MONITOR", "started new", UVM_HIGH);
-   
-   // parent.print();
-
-   // uvm_config_db #(bit)::get (this,"", "is_active", is_active);
-
-   `uvm_info("MON", $sformatf("is_active: %0h", is_active), UVM_LOW);
-   `uvm_info("MON", $sformatf("parent.is_active: %0h", parent.ID), UVM_LOW);
+   uvm_config_db #(uvm_active_passive_enum)::get (this,"", "is_active", is_active);
    if ( is_active == UVM_ACTIVE ) begin
 
       Rx_analysis_port           = new("Rx_analysis_port", this);
       Rx_transaction_collected   = new();
-
-      `uvm_info("MONITOR", "Rx_analysis_port builded", UVM_HIGH);
-      `uvm_info("MON", $sformatf("Created Rx_analysis_port ## is_active: %0h", is_active), UVM_HIGH);
       
    end else begin
 
       Tx_analysis_port           = new("Tx_analysis_port", this);
       Tx_transaction_collected   = new();
-
-      `uvm_info("MONITOR", "Tx_analysis_port builded", UVM_HIGH);
       
    end
-
-   `uvm_info("MONITOR", "finished new", UVM_HIGH);
 
 endfunction : new
 
@@ -98,8 +84,6 @@ endfunction : new
 //---------------------------------------
 function void Monitor::build_phase(uvm_phase phase);
    super.build_phase(phase);
-
-   `uvm_info("MONITOR", $sformatf("started build phase, is_active: %0h", is_active), UVM_LOW);
 
    if ( is_active == UVM_ACTIVE ) begin
 
@@ -112,9 +96,7 @@ function void Monitor::build_phase(uvm_phase phase);
       `uvm_fatal("NO_VIF", {"Virtual interface must be set for:", get_full_name(),".utopia_if"});
       
    end   
-
-   `uvm_info("MONITOR", "finished build phase", UVM_LOW);
-
+   
 endfunction : build_phase
 
 
