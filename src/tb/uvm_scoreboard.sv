@@ -50,15 +50,16 @@ class Scoreboard extends uvm_scoreboard;
   endfunction: build_phase
 
   function void connect_phase(uvm_phase phase);
-    dut_input_port.connect(dut_input_fifo.analysis_export);
-    dut_input_port.connect(dut_input_fifo.analysis_export);
+    super.connect_phase(phase);
+
+    dut_input_port  .connect(dut_input_fifo .analysis_export);
+    dut_output_port .connect(dut_output_fifo.analysis_export);
+    
   endfunction: connect_phase
    
   // write
   virtual function void write(NNI_cell pkt);
-    `uvm_info("WRITE ON SCOREBOARD", "SCB:: Pkt recived", UVM_LOW);
-    //DEBUG 
-    // pkt.print();
+
   endfunction : write
  
 endclass : Scoreboard

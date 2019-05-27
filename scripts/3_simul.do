@@ -8,7 +8,7 @@ do 1_compile.do
 do 2_wave.do
 
 #simulate
-run 10000 ns
+run 10000 ms
 
 #quit vsim
 #quit -sim

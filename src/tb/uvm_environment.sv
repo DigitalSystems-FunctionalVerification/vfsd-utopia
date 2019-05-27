@@ -52,16 +52,16 @@ class Environment extends uvm_env;
       
       // Active Agents creation
       for (int i = 0; i < `RxPorts; i++) begin
-         agents_active[i]           = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
-         agents_active[i].ID        = i;  
-         agents_active[i].is_active = UVM_ACTIVE;
+         agents_active[i]              = Agent::type_id::create($sformatf("Agent_active_%0d", i), this);  
+         agents_active[i].ID           = i;  
+         agents_active[i].is_active    = UVM_ACTIVE;
       end
 
       // Passive Agents creation
       for (int i = 0; i < `TxPorts; i++) begin
-         agents_passive[i]          = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
-         agents_passive[i].ID       = i;  
-         agents_passive[i].is_active = UVM_PASSIVE;
+         agents_passive[i]             = Agent::type_id::create($sformatf("Agent_passive_%0d", i), this);  
+         agents_passive[i].ID          = i;  
+         agents_passive[i].is_active   = UVM_PASSIVE;
       end
       
    endfunction : build_phase

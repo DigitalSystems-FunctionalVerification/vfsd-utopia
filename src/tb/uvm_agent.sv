@@ -121,7 +121,7 @@ endfunction
 //---------------------------------------
 function void Agent::end_of_elaboration();
 
-   //DEBUG 
+   //DEBUG connection
    if ( get_is_active() ) begin
 
       driver_Rx.seq_item_port.debug_connected_to();

@@ -124,29 +124,32 @@ task Monitor::monitoring_passive();
 
    forever
    begin :forever_loop_passive
+      
       ATMCellType Pkt;
+
       @(posedge utopia_if.clk_in, posedge utopia_if.reset)
+         utopia_if.cbt.clav <= 1;
 
-
-      utopia_if.cbt.clav <= 1;
       while (utopia_if.cbt.soc !== 1'b1 && utopia_if.cbt.en !== 1'b0)
          @(utopia_if.cbt);
-      for (int i=0; i<=52; i++) begin
-         // If not enabled, loop
+         for (int i=0; i<=52; i++) begin
+            // If not enabled, loop
 
-         while (utopia_if.cbt.en !== 1'b0)
-         begin
+            while (utopia_if.cbt.en !== 1'b0)
+            begin
+               if (utopia_if.reset===1'b1) break;
+               @(utopia_if.cbt);
+            end
             if (utopia_if.reset===1'b1) break;
+
+            Pkt.Mem[i] = utopia_if.cbt.data;
             @(utopia_if.cbt);
          end
-         if (utopia_if.reset===1'b1) break;
-
-         Pkt.Mem[i] = utopia_if.cbt.data;
-         @(utopia_if.cbt);
-      end
+      
       if (utopia_if.reset===1'b1) continue;
       else
       begin
+
          NNI_cell collected_cell = new();
          utopia_if.cbt.clav <= 0;
 
@@ -193,7 +196,7 @@ task Monitor::monitoring_active();
    //    //    transaction_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
 
    //    analysis_port.write(transaction_collected);
-   //    //DEBUG 
+   //    //DEBUG transaction print
    //    transaction_collected.print();
 
    //  end
