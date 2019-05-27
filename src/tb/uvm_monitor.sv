@@ -169,39 +169,6 @@ endtask
 // monitoring active
 //---------------------------------------------------------------------------
 task Monitor::monitoring_active();
-
-   // ATMCellType Pkt;
-
-   // Tx.cbt.clav <= 1;   
-
-   // forever begin
-
-   //    while (Tx.cbt.soc !== 1'b1 && Tx.cbt.en !== 1'b0)
-   //    @(Tx.cbt);
-   //    for (int i=0; i<=52; i++) begin
-   //       // If not enabled, loop
-   //       while (Tx.cbt.en !== 1'b0) @(Tx.cbt);
-         
-   //       Pkt.Mem[i] = Tx.cbt.data;
-   //       @(Tx.cbt);
-   //    end
-
-   //    Tx.cbt.clav <= 0;
-   //    transaction_collected.unpack(Pkt);
-
-   //    // @(posedge Tx.cbt.clk_out);
-   //    //    transaction_collected.VPI       <= Tx.cbt.ATMcell.uni.VPI;
-   //    //    transaction_collected.VCI       <= Tx.cbt.ATMcell.uni.VCI;
-   //    //    transaction_collected.CLP       <= Tx.cbt.ATMcell.uni.CLP;
-   //    //    transaction_collected.PT        <= Tx.cbt.ATMcell.uni.PT;
-   //    //    transaction_collected.HEC       <= Tx.cbt.ATMcell.uni.HEC;
-   //    //    transaction_collected.Payload   <= Tx.cbt.ATMcell.uni.Payload;        
-
-   //    analysis_port.write(transaction_collected);
-   //    //DEBUG transaction print
-   //    transaction_collected.print();
-
-   //  end
    
 endtask
 
