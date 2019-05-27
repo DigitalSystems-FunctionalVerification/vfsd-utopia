@@ -63,7 +63,7 @@ endclass : Monitor
 function Monitor::new(string name, uvm_component parent);
    super.new(name, parent);
 
-   uvm_config_db #(uvm_active_passive_enum)::get (this,"", "is_active", is_active);
+   void'(uvm_config_db #(uvm_active_passive_enum)::get (this,"", "is_active", is_active));
    if ( is_active == UVM_ACTIVE ) begin
 
       Rx_analysis_port           = new("Rx_analysis_port", this);
