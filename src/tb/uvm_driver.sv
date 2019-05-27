@@ -98,6 +98,7 @@ task Driver::drive();
       Rx.cbr.data <= Pkt.Mem[i];
       @(Rx.cbr);
     end
+
    Rx.cbr.soc <= 'z;
    Rx.cbr.data <= 8'bx;
    Rx.cbr.clav <= 0;
