@@ -120,7 +120,9 @@ function void Test::build_phase(uvm_phase phase);
   environment   = Environment::type_id::create("Environment", this);
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
   cfg           = new(`RxPorts,`TxPorts);
+
   uvm_config_db#(virtual cpu_ifc)::get(null, "*", "mif", mif);
+  
   cpu           = new(mif, cfg);
 
 endfunction
