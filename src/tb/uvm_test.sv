@@ -71,6 +71,9 @@
 `include "definitions.sv"  // include external definitions
 `include "uvm_environment.sv"
 `include "uvm_atm_sequencer.sv"
+`include "uvm_cpu_driver.sv"
+`include "config.sv"
+`include "cpu_ifc.sv"
 
 class Test extends uvm_test;
   `uvm_component_utils(Test)
@@ -84,6 +87,10 @@ class Test extends uvm_test;
   // Agent
   //---------------------------------------   
   Environment environment;
+
+  CPU_driver  cpu;
+	Config      cfg;
+	vCPU_T      mif;
 
   // logic rst, clk;
 
@@ -112,6 +119,9 @@ function void Test::build_phase(uvm_phase phase);
 
   environment   = Environment::type_id::create("Environment", this);
   uni_sequence  = UNI_sequence::type_id::create("uni_sequence");
+  cfg           = new(`RxPorts,`TxPorts);
+  uvm_config_db#(virtual cpu_ifc)::get(null, "*", "mif", mif);
+  cpu           = new(mif, cfg);
 
 endfunction
 
@@ -122,7 +132,6 @@ function void Test::connect_phase(uvm_phase phase);
   // for (int i = 0; i < NumTx; i++) begin
   //   environment.agents[i].monitor_Tx.item_collected_port.connect(scoreboard.item_collected_export);    
   // end
-
 endfunction : connect_phase
 
 //---------------------------------------
@@ -141,6 +150,8 @@ task Test::run_phase(uvm_phase phase);
 
   phase.raise_objection(this);
 
+  cpu.run();
+
   for (int i = 0; i < NumRx; i++) begin
     uni_sequence.start(environment.agents_active[i].uni_sequencer_Rx);
   end
@@ -156,7 +167,7 @@ endtask : run_phase
 // Post main phase
 //---------------------------------------
 task Test::post_main_phase(uvm_phase phase);
-  //DEBUG 
+  //DEBUG db dump
   // uvm_config_db #(int)::dump();
 endtask : post_main_phase;
 
