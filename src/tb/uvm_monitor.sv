@@ -158,7 +158,7 @@ task Monitor::monitoring_passive();
 
          Tx_analysis_port.write(collected_cell);
          //DEBUG read transaction from DUT
-         Tx_transaction_collected.print();
+         // Tx_transaction_collected.print();
 
       end
    end: forever_loop_passive
